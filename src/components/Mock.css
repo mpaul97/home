@@ -112,11 +112,11 @@
 .content-container {
   display: inline-flex;
   width: 100%;
+  height: fit-content;
 }
 
 .team-container {
   width: 25%;
-  height: 500px;
   border: 2px solid var(--pale-green);
   border-top: none;
 }
@@ -124,18 +124,36 @@
 .subtitle {
   padding: 5px 10px;
   color: var(--pale-green);
+  border-bottom: 2px solid var(--pale-green);
+}
+
+.list-element.team {
+  display: block;
+  color: var(--pale-green);
+  padding: 3px;
+  padding-left: 10px;
+  border-bottom: 1px solid var(--pale-green);
+}
+
+.team-select {
+  width: 100%;
+  height: fit-content;
+  font-size: 21px;
+  padding: 5px;
+  color: var(--dark-blue);
+  border: 0.2px solid var(--pale-green);
 }
 
 .player-container {
   width: 50%;
-  height: 500px;
   border: 2px solid var(--pale-green);
   border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 .favorites-container {
   width: 25%;
-  height: 500px;
   border: 2px solid var(--pale-green);
   border-top: none;
 }

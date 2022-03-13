@@ -1,21 +1,48 @@
 import "./Mock.css";
 import PlayerQueue from "./PlayerQueue";
+import Team from "./Team";
+
+//Team Info
+const teamInfo = [
+    {
+        name: 'QB',
+        num: 1
+    },
+    {
+        name: 'RB',
+        num: 2
+    },
+    {
+        name: 'WR',
+        num: 2
+    },
+    {
+        name: 'TE',
+        num: 1
+    },
+    {
+        name: 'FLEX',
+        num: 1
+    },
+    {
+        name: 'K',
+        num: 1
+    },
+    {
+        name: 'DST',
+        num: 1
+    },
+    {
+        name: 'BEN',
+        num: 7
+    }
+]
 
 function Mock() {
     //Queue info
     const leagueSize = 12;
     const playersSize = 2;
     const queuePosition = 4;
-
-    //Team Info
-    const qb = 1;
-    const rb = 2;
-    const wr = 2;
-    const te = 1;
-    const flex = 1;
-    const k = 1;
-    const dst = 1;
-    const bench = 7;
 
     return (
         <div className="mock-container">
@@ -34,9 +61,12 @@ function Mock() {
             </div>
             <div className="content-container">
                 <div className="team-container">
-                    <h2 className="subtitle">Team</h2>
+                    <h2 className="subtitle">Team {queuePosition} </h2>
                     <div className="team-players-container">
-
+                        <Team 
+                            teamInfo={teamInfo}
+                            leagueSize={leagueSize}
+                        />
                     </div>
                 </div>
                 <div className="player-container">
