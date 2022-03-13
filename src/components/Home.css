@@ -1,0 +1,207 @@
+:root {
+  --dark-blue: #073b4c;
+  --light-blue: #118ab2;
+  --whiteish: #d7fdf0;
+  --pale-green: #b2ffd6;
+  --pink: #aa78a6;
+  --t-shadow: #073b4c13;
+  --b-shadow: #b2ffd654;
+  --b-shadow-inactive: #073b4c56;
+}
+
+body {
+  background-color: var(--dark-blue);
+}
+
+.home-container {
+  margin: 40px auto;
+  width: 85%;
+  max-width: 700px;
+  height: fit-content;
+  background-color: var(--light-blue);
+  border-radius: 10px;
+  text-align: center;
+  padding-bottom: 40px;
+  box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.5);
+}
+
+.heading {
+  font-size: 42px;
+  color: var(--pale-green);
+  padding: 15px;
+  padding-bottom: 0;
+  text-decoration: underline;
+  text-shadow: -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black,
+    1px 1px 2px black;
+  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.divider {
+  width: 100%;
+  height: 4px;
+  margin-top: -15px;
+  background-color: var(--pale-green);
+}
+
+/* @keyframes move {
+  0% {
+    border-top: 1px solid var(--pale-green);
+    border-bottom: 1px solid var(--pale-green);
+    height: 4px;
+  }
+  50% {
+    border-top: 2px solid var(--pale-green);
+    border-bottom: 2px solid var(--pale-green);
+    height: 2px;
+  }
+  100% {
+    border-top: 1px solid var(--pale-green);
+    border-bottom: 1px solid var(--pale-green);
+    height: 4px;
+  }
+} */
+
+.list {
+  list-style-type: none;
+  margin-left: -40px;
+}
+
+.list-element {
+  display: inline-flex;
+}
+
+.subheading {
+  font-size: 25px;
+  color: var(--pale-green);
+  text-shadow: -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black,
+    1px 1px 2px black;
+  text-shadow: -3px -3px 10px var(--t-shadow), 3px -3px 10px var(--t-shadow),
+    -3px 3px 10px var(--t-shadow), 3px 3px 10px var(--t-shadow);
+  text-decoration: underline;
+}
+
+.home-button {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  margin: 10px;
+  margin-top: 0px;
+  border-radius: 100%;
+  border: none;
+  color: var(--pale-green);
+  background-color: var(--dark-blue);
+  transition: ease 0.1s;
+  box-shadow: 0px 0px 20px var(--b-shadow-inactive);
+}
+
+.home-button:hover {
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+  cursor: pointer;
+}
+
+.home-button:active {
+  width: 38px;
+  height: 38px;
+  margin: 11px;
+  margin-top: 0px;
+  box-shadow: 0px 0px 20px var(--b-shadow);
+}
+
+#active {
+  color: var(--dark-blue);
+  background-color: var(--pale-green);
+  box-shadow: 0px 0px 10px var(--b-shadow);
+}
+
+.home-button#active:hover {
+  border: none;
+}
+
+.queue-button {
+  padding: 8px 12px;
+  margin: 10px 0;
+  margin-top: 0;
+  background-color: var(--dark-blue);
+  border: none;
+  color: var(--pale-green);
+  font-size: 13px;
+  transition: ease 0.1s;
+  border-right: 2px solid var(--pale-green);
+  box-shadow: 0px 0px 20px var(--b-shadow-inactive);
+}
+
+.queue-button.right {
+  border-right: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.queue-button.left {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.queue-button:hover {
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+  cursor: pointer;
+}
+
+.queue-button:active {
+  padding: 7px 12px;
+}
+
+.home-button.type {
+  width: fit-content;
+  margin: 10px;
+  margin-top: 0px;
+  border-radius: 20px;
+  padding: 0 15px;
+}
+
+.player-element {
+  margin: 10px;
+}
+
+.players.list {
+  margin: 0 10px;
+  margin-right: 50px;
+}
+
+.player-element label {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 4px;
+  font-size: 16px;
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  text-shadow: -1px -1px 1px var(--t-shadow), 1px -1px 1px var(--t-shadow),
+    -1px 1px 1px var(--t-shadow), 1px 1px 1px var(--t-shadow);
+}
+
+.player-element select {
+  display: inline-block;
+  vertical-align: bottom;
+  font-size: 16px;
+  padding: 1.4px;
+  background-color: var(--dark-blue);
+  margin-top: -10px;
+  border: none;
+  color: var(--pale-green);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.home-button.submit {
+  width: fit-content;
+  border-radius: 20px;
+  padding: 0 15px;
+  margin-top: 40px;
+}
+
+.hidden-input {
+  display: none;
+}

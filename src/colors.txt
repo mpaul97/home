@@ -1,0 +1,5 @@
+dark blue : #073b4c
+light blue : #118ab2
+whitish : #D7FDF0
+pale green : #B2FFD6
+pink : #AA78A6

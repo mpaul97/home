@@ -1,0 +1,141 @@
+:root {
+  --dark-blue: #073b4c;
+  --light-blue: #118ab2;
+  --whiteish: #d7fdf0;
+  --pale-green: #b2ffd6;
+  --pink: #aa78a6;
+  --gun-metal: #1e343b;
+  --t-shadow: #073b4c13;
+  --b-shadow: #b2ffd654;
+  --b-shadow-inactive: #073b4c56;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.mock-container {
+  width: 100%;
+  height: fit-content;
+  background-color: var(--dark-blue);
+}
+
+.header {
+  width: 100%;
+  height: fit-content;
+  border-bottom: 2px solid var(--pale-green);
+}
+
+.title {
+  display: inline-flex;
+  padding: 8px 13px;
+  font-size: 40px;
+  color: var(--pale-green);
+}
+
+.timer-container {
+  display: inline-flex;
+  float: right;
+  font-size: 20px;
+  padding: 2px 10px;
+  margin-right: 10px;
+  margin-top: 15px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.timer {
+  background-color: var(--gun-metal);
+  padding: 0px 6px;
+  padding-bottom: 2px;
+  color: var(--pale-green);
+  border-radius: 10px;
+  border: 2px solid var(--pale-green);
+}
+
+.player-queue {
+  background-color: var(--gun-metal);
+  border-bottom: 2px solid var(--pale-green);
+}
+
+.queue-element-container {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 37px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: var(--dark-blue);
+  color: var(--pale-green);
+  margin: 4px;
+  margin-top: 4px;
+  border: 2px solid var(--pale-green);
+  border-radius: 50%;
+}
+
+.list-element.queue #active {
+  box-shadow: 0px 0px 5px var(--b-shadow);
+}
+
+.queue-element-container.partition {
+  height: 58px !important;
+  width: 0px !important;
+  font-size: 0;
+  border-radius: 0px;
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+  margin-top: 0px;
+  margin-right: 3px;
+  display: none;
+}
+
+.queue-element-container.round {
+  height: 52px !important;
+  width: 60px !important;
+  line-height: 52px;
+  margin: 0;
+  font-size: 12px;
+  border-radius: 0;
+  background-color: var(--dark-blue) !important;
+  border-top: none;
+  border-bottom: none;
+  margin-right: 6px;
+  margin-left: 6px;
+}
+
+.queue-element-container.round.first-round {
+  margin-left: 0px;
+}
+
+.content-container {
+  display: inline-flex;
+  width: 100%;
+}
+
+.team-container {
+  width: 25%;
+  height: 500px;
+  border: 2px solid var(--pale-green);
+  border-top: none;
+}
+
+.subtitle {
+  padding: 5px 10px;
+  color: var(--pale-green);
+}
+
+.player-container {
+  width: 50%;
+  height: 500px;
+  border: 2px solid var(--pale-green);
+  border-top: none;
+}
+
+.favorites-container {
+  width: 25%;
+  height: 500px;
+  border: 2px solid var(--pale-green);
+  border-top: none;
+}
