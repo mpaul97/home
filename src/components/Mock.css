@@ -75,7 +75,7 @@
 }
 
 .list-element.queue #active {
-  box-shadow: 0px 0px 5px var(--b-shadow);
+  box-shadow: none;
 }
 
 .queue-element-container.partition {
@@ -125,23 +125,36 @@
   padding: 5px 10px;
   color: var(--pale-green);
   border-bottom: 2px solid var(--pale-green);
+  margin: -1px;
 }
 
 .list-element.team {
   display: block;
+  font-size: 12px;
   color: var(--pale-green);
   padding: 3px;
   padding-left: 10px;
   border-bottom: 1px solid var(--pale-green);
+  margin: -1px;
 }
 
 .team-select {
-  width: 100%;
+  width: 100.2%;
   height: fit-content;
-  font-size: 21px;
-  padding: 5px;
+  font-size: 16px;
+  padding: 6px;
+  padding-bottom: 5px;
+  padding-left: 2px;
   color: var(--dark-blue);
-  border: 0.2px solid var(--pale-green);
+  background-color: var(--pale-green);
+  border: none;
+  margin-left: -0.1px;
+  margin-bottom: -0.5px;
+}
+
+.team-select:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 
 .player-container {
@@ -150,6 +163,34 @@
   border-top: none;
   border-left: none;
   border-right: none;
+}
+
+.players-top {
+  display: inline-flex;
+  width: 100%;
+  height: fit-content;
+  border-bottom: 2px solid var(--pale-green);
+}
+
+.player-image {
+  width: 100px;
+  height: fit-content;
+  margin: 10px;
+  margin-left: 20px;
+  opacity: 0.9;
+}
+
+.player-text {
+  color: var(--pale-green);
+}
+
+.player-name {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+.player-info {
+  font-size: 12px;
 }
 
 .favorites-container {

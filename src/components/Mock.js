@@ -1,6 +1,7 @@
 import "./Mock.css";
 import PlayerQueue from "./PlayerQueue";
 import Team from "./Team";
+import Player from "./Players";
 
 //Team Info
 const teamInfo = [
@@ -70,7 +71,7 @@ function Mock() {
                     </div>
                 </div>
                 <div className="player-container">
-
+                    <Player />
                 </div>
                 <div className="favorites-container">
 
