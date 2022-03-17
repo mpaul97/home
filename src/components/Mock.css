@@ -5,9 +5,8 @@
   --pale-green: #b2ffd6;
   --pink: #aa78a6;
   --gun-metal: #1e343b;
-  --t-shadow: #073b4c13;
-  --b-shadow: #b2ffd654;
-  --b-shadow-inactive: #073b4c56;
+  --gun-metal-scroll: #1e343bc0;
+  --pale-green-scroll: #b2ffd691;
 }
 
 * {
@@ -16,9 +15,11 @@
 }
 
 .mock-container {
+  box-sizing: border-box;
   width: 100%;
   height: fit-content;
   background-color: var(--dark-blue);
+  min-width: 600px;
 }
 
 .header {
@@ -48,7 +49,7 @@
 .timer {
   background-color: var(--gun-metal);
   padding: 0px 6px;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
   color: var(--pale-green);
   border-radius: 10px;
   border: 2px solid var(--pale-green);
@@ -139,7 +140,7 @@
 }
 
 .team-select {
-  width: 100.2%;
+  width: 101%;
   height: fit-content;
   font-size: 16px;
   padding: 6px;
@@ -148,7 +149,7 @@
   color: var(--dark-blue);
   background-color: var(--pale-green);
   border: none;
-  margin-left: -0.1px;
+  margin-left: -0.5px;
   margin-bottom: -0.5px;
 }
 
@@ -166,10 +167,16 @@
 }
 
 .players-top {
-  display: inline-flex;
+  display: block;
+  overflow: auto;
   width: 100%;
   height: fit-content;
-  border-bottom: 2px solid var(--pale-green);
+}
+
+.player-image-info {
+  display: inline-flex;
+  float: left;
+  width: 100%;
 }
 
 .player-image {
@@ -193,6 +200,182 @@
   font-size: 12px;
 }
 
+/* Add Favorite Button */
+.add-favorite-container {
+  float: right;
+  position: sticky;
+  margin-top: -115px;
+  margin-right: 14px;
+}
+
+.add-favorite {
+  font-size: 18px;
+  padding: 3px;
+  line-height: 10px;
+  background-color: var(--gun-metal);
+  color: var(--pale-green);
+  border: 2px solid var(--pale-green);
+  border-radius: 5px;
+  transition: 0.2s ease;
+}
+
+.add-favorite:hover {
+  cursor: pointer;
+  background-color: var(--pale-green);
+  color: var(--gun-metal);
+}
+
+/* Search Form */
+.search-container {
+  float: right;
+  position: sticky;
+  margin-top: -38px;
+}
+
+.player-search-form {
+  display: inline-flex;
+}
+
+.player-search {
+  float: left;
+  width: 70%;
+  height: 20px;
+  padding: 1px 6px;
+  border: none;
+  font-size: 10px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+}
+
+::placeholder {
+  color: var(--dark-blue);
+  opacity: 0.8;
+}
+
+.player-search:focus {
+  outline: none;
+}
+
+.player-search-button {
+  float: right;
+  text-align: center;
+  line-height: 8px;
+  border: none;
+  font-size: 10px;
+  padding: 0 6px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+}
+
+.player-search-button:hover {
+  cursor: pointer;
+}
+
+.player-positions-container {
+  width: 100%;
+}
+
+/* Players Bottom */
+.players-bottom {
+  margin-top: 10px;
+}
+
+.player-positions-list {
+  display: inline-flex;
+  list-style: none;
+  width: 100%;
+  border-bottom: 1px solid var(--pale-green);
+}
+
+.position-option {
+  width: 12%;
+  font-size: 12px;
+  text-align: center;
+  padding: 5px;
+  background-color: var(--gun-metal);
+  color: var(--pale-green);
+  border: 1.5px solid var(--pale-green);
+  margin-bottom: -1px;
+  transition: ease;
+}
+
+.position-option:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+#active1 {
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+  font-weight: 500;
+  opacity: 1;
+}
+
+/* Players Table */
+.all-players-container {
+  margin: 0px;
+  overflow-x: scroll;
+}
+
+.players-table {
+  min-width: 450px;
+  font-size: 10px;
+  background-color: var(--dark-blue);
+  color: var(--pale-green);
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  background-color: var(--gun-metal-scroll);
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--pale-green-scroll);
+  transition: 0.6s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--pale-green);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+th {
+  padding: 3px 7px;
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+}
+
+td {
+  padding: 5px 3px;
+}
+
+tr {
+  background-color: var(--gun-metal);
+  color: var(--pale-green);
+  transition: 0.1s ease;
+}
+
+tr:hover {
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
+}
+
+.table-rows:hover {
+  cursor: pointer;
+}
+
+/* Favorites */
 .favorites-container {
   width: 25%;
   border: 2px solid var(--pale-green);

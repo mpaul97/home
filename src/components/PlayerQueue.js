@@ -31,7 +31,7 @@ function PlayerQueue({ leagueSize, playersSize, queuePosition }) {
     queueArr.unshift('Round 1');
 
     const renderQueue = queueArr.map((i) => 
-        <li key={i} className="list-element queue">
+        <li key={i + " " + Math.random()} className="list-element queue">
             <div 
                 style={childScroll}
                 className={cx("queue-element-container", {

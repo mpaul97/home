@@ -2,6 +2,9 @@ import "./Mock.css";
 import PlayerQueue from "./PlayerQueue";
 import Team from "./Team";
 import Player from "./Players";
+import { useEffect, useState } from "react";
+import { db } from "../firebase-config";
+import { collection, getDocs } from "firebase/firestore";
 
 //Team Info
 const teamInfo = [

@@ -14,7 +14,7 @@ function Team({ teamInfo, leagueSize }) {
     const infoArr = getTeamInfo(teamInfo);
 
     const renderTeam = infoArr.map((i) => 
-        <li key={i} className="list-element team">
+        <li key={i + Math.random()} className="list-element team">
             {i + ": "}
         </li>
     );

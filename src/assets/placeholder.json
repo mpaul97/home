@@ -1,0 +1,62 @@
+[
+    {
+        "overallRanking": 1,
+        "name": "Aaron Jones",
+        "team": "GNB",
+        "position": "RB",
+        "projections": 193.4,
+        "lastSeasonPoints": 177,
+        "positionRanking": 1,
+        "flexRanking": 1
+    },
+    {
+        "overallRanking": 2,
+        "name": "Davante Adams",
+        "team": "GNB",
+        "position": "WR",
+        "projections": 234.2,
+        "lastSeasonPoints": 221.3,
+        "positionRanking": 1,
+        "flexRanking": 2
+    },
+    {
+        "overallRanking": 4,
+        "name": "Aaron Rodgers",
+        "team": "GNB",
+        "position": "QB",
+        "projections": 345.6,
+        "lastSeasonPoints": 332.3,
+        "positionRanking": 1,
+        "flexRanking": 0
+    },
+    {
+        "overallRanking": 3,
+        "name": "Travis Kelce",
+        "team": "KC",
+        "position": "TE",
+        "projections": 170.8,
+        "lastSeasonPoints": 164.5,
+        "positionRanking": 1,
+        "flexRanking": 3
+    },
+    {
+        "overallRanking": 10,
+        "name": "Mason Crosby",
+        "team": "GNB",
+        "position": "K",
+        "projections": 142,
+        "lastSeasonPoints": 130,
+        "positionRanking": 1,
+        "flexRanking": 0
+    },
+    {
+        "overallRanking": 23,
+        "name": "Green Bay Packers",
+        "team": "GNB",
+        "position": "DST",
+        "projections": 132,
+        "lastSeasonPoints": 119,
+        "positionRanking": 1,
+        "flexRanking": 0
+    }
+]
