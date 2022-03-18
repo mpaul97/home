@@ -49,12 +49,14 @@ function Mock() {
     const playersSize = 2;
     const queuePosition = 4;
 
-    //Selected Player
-    const [favPlayers, setFavPlayers] = useState([]);
+    const [count, setCount] = useState(0);
+    const [selectedName, setSelectedName] = useState("");
+
+    var favPlayers = [];
 
     //Set Player on Favorite
     const handleFavorite = (name) => {
-        alert(name);
+        favPlayers.push(name);
     };
 
     return (
@@ -93,7 +95,8 @@ function Mock() {
                 <div className="favorites-container">
                     <h2 className="subtitle">Favorites</h2>
                     <Favorites 
-                        func={handleFavorite}
+                        favPlayers={favPlayers}
+                        click={handleFavorite}
                     />
                 </div>
             </div>
