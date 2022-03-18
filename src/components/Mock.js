@@ -5,6 +5,7 @@ import Player from "./Players";
 import { useEffect, useState } from "react";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
+import Favorites from "./Favorites";
 
 //Team Info
 const teamInfo = [
@@ -48,12 +49,25 @@ function Mock() {
     const playersSize = 2;
     const queuePosition = 4;
 
+    //Selected Player
+    const [favPlayers, setFavPlayers] = useState([]);
+
+    //Set Player on Favorite
+    const handleFavorite = (name) => {
+        alert(name);
+    };
+
     return (
         <div className="mock-container">
             <div className="header">
                 <h1 className="title">Minute Mock</h1>
-                <div className="timer-container">
-                    <h3 className="timer">0:00</h3>
+                <div className="header-info">
+                    <div className="start-container">
+                        <button className="start-button">Start</button>
+                    </div>
+                    <div className="timer-container">
+                        <h3 className="timer">0:00</h3>
+                    </div>
                 </div>
             </div>
             <div className="player-queue">
@@ -74,10 +88,13 @@ function Mock() {
                     </div>
                 </div>
                 <div className="player-container">
-                    <Player />
+                    <Player favPlayer={handleFavorite}/>
                 </div>
                 <div className="favorites-container">
-
+                    <h2 className="subtitle">Favorites</h2>
+                    <Favorites 
+                        func={handleFavorite}
+                    />
                 </div>
             </div>
         </div>

@@ -72,10 +72,10 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players() {
+function Players({ favPlayer }) {
     //Players
     const [players, setPlayers] = useState([]);
-    const playersCollectionRef = collection(db, "players");
+    const playersCollectionRef = collection(db, "players"); //Firebase
 
     const [activePosition, setActivePosition] = useState('ALL');
     const renderPositionOptions = positionOptions.map((i) =>
@@ -106,8 +106,8 @@ function Players() {
 
     temp = getCurrentPlayers(activePosition, temp);
 
-    const [selectedPlayer, setSelectedPlayer] = useState();
-    const [selectedPlayerPoints, setSelectedPlayerPoints] = useState();
+    const [selectedPlayer, setSelectedPlayer] = useState(temp[0].name);
+    const [selectedPlayerPoints, setSelectedPlayerPoints] = useState(temp[0].lastSeasonPoints);
 
     const handleClick = (player) => {
         setSelectedPlayer(player.name);
@@ -115,7 +115,12 @@ function Players() {
     };
 
     const renderPlayers = temp.map((i) => 
-        <tr onClick={() => handleClick(i)} className="table-rows" key={i.name}>
+        <tr 
+            onClick={() => handleClick(i)} 
+            className="table-rows" 
+            key={i.name}
+            id={selectedPlayer===i.name ? 'activePlayer' : ''}
+        >
             <td>{activePosition==='ALL' ? i.overallRanking : (activePosition==='FLEX' ? i.flexRanking : i.positionRanking) }</td>
             <td>{i.name}</td>
             <td>{i.team}</td>
@@ -135,8 +140,16 @@ function Players() {
                         <p className="player-info">2021 Points: {selectedPlayerPoints}</p>
                     </div>
                 </div>
-                <div className="add-favorite-container">
-                    <button className="add-favorite"><AiOutlineStar /></button>
+                <div className="player-buttons">
+                    <button className="draft-button">Draft</button>
+                    <div className="add-favorite-container">
+                        <button 
+                            className="add-favorite"
+                            onClick={() => favPlayer(selectedPlayer)}
+                        >
+                            <AiOutlineStar />
+                        </button>
+                    </div>
                 </div>
                 <div className="search-container">
                     <form className="player-search-form">
