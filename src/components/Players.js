@@ -1,5 +1,9 @@
 import playerImg from '../assets/player_placeholder.png';
 import tempPlayers from '../assets/placeholder.json';
+import playersStd from '../assets/tempData_std.json';
+import playersPpr from '../assets/tempData_ppr.json';
+import playersHalf from '../assets/tempData_half.json';
+import playersKings from '../assets/tempData_kings.json';
 import { FaSearch } from 'react-icons/fa';
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -72,7 +76,8 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players({ fav, favPlayers }) {
+function Players({ fav, favPlayers, allPlayers }) {
+
     //Players
     const [players, setPlayers] = useState([]);
     const playersCollectionRef = collection(db, "players"); //Firebase
@@ -101,20 +106,17 @@ function Players({ fav, favPlayers }) {
         // getPlayers();
     });
 
-    // Player Table Logic
-    var temp = JSON.parse(JSON.stringify(tempPlayers));
+    allPlayers = getCurrentPlayers(activePosition, allPlayers);
 
-    temp = getCurrentPlayers(activePosition, temp);
-
-    const [selectedPlayer, setSelectedPlayer] = useState(temp[0].name);
-    const [selectedPlayerPoints, setSelectedPlayerPoints] = useState(temp[0].lastSeasonPoints);
+    const [selectedPlayer, setSelectedPlayer] = useState(allPlayers[0].name);
+    const [selectedPlayerPoints, setSelectedPlayerPoints] = useState(allPlayers[0].lastSeasonPoints);
 
     const handleClick = (player) => {
         setSelectedPlayer(player.name);
         setSelectedPlayerPoints(player.lastSeasonPoints);
     };
 
-    const renderPlayers = temp.map((i) => 
+    const renderPlayers = allPlayers.map((i) => 
         <tr 
             onClick={() => handleClick(i)} 
             className="table-rows" 

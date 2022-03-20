@@ -595,6 +595,7 @@
 
 .all-players-container {
   margin: 0px;
+  max-height: 413px;
   overflow-x: hidden;
 }
 
@@ -710,12 +711,12 @@ tr:hover {
 .remove-container {
   float: left;
   margin-left: -2px;
-  width: 10%;
+  width: 7%;
   height: 100%;
 }
 
 .remove-inner-container {
-  margin-top: 3px;
+  margin-top: 10%;
   width: fit-content;
   height: fit-content;
   line-height: 6px;
