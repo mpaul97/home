@@ -485,6 +485,16 @@
   color: var(--gun-metal);
 }
 
+#disabled-button {
+  opacity: 0.8;
+}
+
+#disabled-button:hover {
+  cursor: not-allowed;
+  background-color: var(--gun-metal);
+  color: var(--pale-green);
+}
+
 /* ----------------------------------------------------- */
 /* Search Form */
 
@@ -589,7 +599,7 @@
 }
 
 .all-players-container:hover {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .all-players-container::-webkit-scrollbar {
@@ -668,7 +678,7 @@ tr:hover {
 }
 
 .favorites-list:hover {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .favorites-list::-webkit-scrollbar {
@@ -695,4 +705,26 @@ tr:hover {
   color: var(--pale-green);
   font-size: 12px;
   padding: 2px 7px;
+}
+
+.remove-container {
+  float: left;
+  margin-left: -2px;
+  width: 10%;
+  height: 100%;
+}
+
+.remove-inner-container {
+  margin-top: 3px;
+  width: fit-content;
+  height: fit-content;
+  line-height: 6px;
+  border-radius: 100%;
+  transition: 0.2s ease;
+}
+
+.remove-inner-container:hover {
+  cursor: pointer;
+  background-color: var(--pale-green);
+  color: var(--dark-blue);
 }

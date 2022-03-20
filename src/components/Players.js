@@ -72,7 +72,7 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players({ favPlayer }) {
+function Players({ fav, favPlayers }) {
     //Players
     const [players, setPlayers] = useState([]);
     const playersCollectionRef = collection(db, "players"); //Firebase
@@ -130,6 +130,9 @@ function Players({ favPlayer }) {
         </tr>
     );
 
+    const emptyStar = <AiOutlineStar />;
+    const filledStar = <AiFillStar />;
+
     return (
         <div className="players-all">
             <div className="players-top">
@@ -145,9 +148,11 @@ function Players({ favPlayer }) {
                     <div className="add-favorite-container">
                         <button 
                             className="add-favorite"
-                            onClick={() => favPlayer(selectedPlayer)}
+                            onClick={() => fav(selectedPlayer)}
+                            disabled={favPlayers.includes(selectedPlayer) ? true : false}
+                            id={favPlayers.includes(selectedPlayer) ? 'disabled-button' : ''}
                         >
-                            <AiOutlineStar />
+                            {favPlayers.includes(selectedPlayer) ? filledStar : emptyStar}
                         </button>
                     </div>
                 </div>

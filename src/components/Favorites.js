@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AiFillStar, AiOutlineStar, AiOutlineMinusCircle, AiFillMinusCircle } from "react-icons/ai";
 
-function Favorites({ favPlayers, click }) {
+function Favorites({ favPlayers, handleRemoveFav }) {
 
     // const [initSize, setInitSize] = useState(100);
 
@@ -10,14 +11,37 @@ function Favorites({ favPlayers, click }) {
     //     </li>
     // );
 
-    const [players, setPlayers] = useState(favPlayers);
+    const renderInit = (
+        <li className="list-element favorite">
+            Click the
+            <AiOutlineStar 
+                style={
+                    {
+                        verticalAlign: 'middle', 
+                        padding: 2,
+                        marginTop: -2
+                    }
+                } 
+            />
+            to add players
+        </li>
+    );
 
-    const renderInit = <li className="list-element favorite">Add Favorites to Queue</li>;
+    const renderFavorites = favPlayers.map((name, index) => 
+        <li key={name} className="list-element favorite">
+            <div className="remove-container">
+                <div className="remove-inner-container">
+                    <AiOutlineMinusCircle onClick={() => handleRemoveFav(name)} className="remove-favorite" />
+                </div>
+            </div>
+            {index+1}: {name}
+        </li>
+    );
 
     return (
         <div className="favorites-container-list">
             <ul className="favorites-list">
-                {players.length}
+                {favPlayers.length===0 ? renderInit : renderFavorites}
             </ul>
         </div>
     )
