@@ -76,7 +76,7 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players({ fav, favPlayers, allPlayers }) {
+function Players({ fav, favPlayers, allPlayers, queuePosition, currDrafter }) {
 
     //Players
     const [players, setPlayers] = useState([]);
@@ -104,6 +104,7 @@ function Players({ fav, favPlayers, allPlayers }) {
         // };
 
         // getPlayers();
+        
     });
 
     allPlayers = getCurrentPlayers(activePosition, allPlayers);
@@ -146,7 +147,13 @@ function Players({ fav, favPlayers, allPlayers }) {
                     </div>
                 </div>
                 <div className="player-buttons">
-                    <button className="draft-button">Draft</button>
+                    <button 
+                        className="draft-button"
+                        disabled={queuePosition !== currDrafter ? true : false}
+                        id={queuePosition !== currDrafter ? 'disabled-button' : ''}
+                    >
+                        Draft
+                    </button>
                     <div className="add-favorite-container">
                         <button 
                             className="add-favorite"
@@ -163,6 +170,17 @@ function Players({ fav, favPlayers, allPlayers }) {
                         <input type="text" className="player-search" placeholder="Search players"/>
                         <button type="submit" className="player-search-button"><FaSearch /></button>
                     </form>
+                </div>
+                <div className="toggle-drafted-container">
+                    {/* <form className="toggle-drafted-form">
+                        <label htmlFor="toggle-drafted">Show Drafted Players</label>
+                        <input name="toggle-drafted" type="checkbox"></input>
+                    </form> */}
+                    <label className="toggle-drafted-container">
+                        Show Drafted Players
+                        <input className="toggle-drafted" type="checkbox"></input>
+                        <span className="drafted-checkmark"></span>
+                    </label>
                 </div>
             </div>
             <div className="players-bottom">

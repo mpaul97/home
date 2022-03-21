@@ -33,6 +33,10 @@
   display: none;
 }
 
+::-webkit-scrollbar-corner {
+  background-color: var(--pale-green-scroll);
+}
+
 /* ----------------------------------------------------- */
 /* Header */
 /* ----------------------------------------------------- */
@@ -89,6 +93,10 @@
   background-color: var(--pale-green);
   color: var(--gun-metal);
   cursor: pointer;
+}
+
+#hide-start {
+  display: none;
 }
 
 @keyframes move {
@@ -354,10 +362,10 @@
 
 .list-element.team {
   display: block;
-  font-size: 12px;
+  font-size: 10px;
   color: var(--pale-green);
-  padding: 4px;
-  padding-left: 10px;
+  padding: 6.02px 0px;
+  padding-left: 8px;
   border-bottom: 1px solid var(--pale-green);
   margin: -1px;
 }
@@ -365,10 +373,10 @@
 .team-select {
   width: 101%;
   height: fit-content;
-  font-size: 16px;
+  font-size: 12px;
   padding: 6px;
   padding-bottom: 5px;
-  padding-left: 2px;
+  padding-left: 1px;
   color: var(--dark-blue);
   background-color: var(--pale-green);
   border: none;
@@ -551,6 +559,47 @@
   width: 100%;
 }
 
+.toggle-drafted-container {
+  float: right;
+  margin-right: 6px;
+  margin-top: -5px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  font-size: 10px;
+}
+
+.toggle-drafted-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.drafted-checkmark {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 10px;
+  width: 10px;
+  background-color: var(--pale-green);
+}
+
+.toggle-drafted-form {
+  display: inline-flex;
+  font-size: 10px;
+  color: var(--pale-green);
+}
+
+.toggle-drafted-form input {
+  width: 11px;
+  height: 11px;
+  margin-top: 2px;
+  margin-left: 5px;
+}
+
 /* ----------------------------------------------------- */
 /* ----------------------------------------------------- */
 /* Players Bottom */
@@ -578,6 +627,14 @@
   transition: ease;
 }
 
+.position-option.ALL {
+  border-left: none;
+}
+
+.position-option.DST {
+  border-right: none;
+}
+
 .position-option:hover {
   cursor: pointer;
   opacity: 0.8;
@@ -595,12 +652,12 @@
 
 .all-players-container {
   margin: 0px;
-  max-height: 413px;
-  overflow-x: hidden;
+  max-height: 285.5px;
+  overflow: hidden;
 }
 
 .all-players-container:hover {
-  overflow-x: auto;
+  overflow: auto;
 }
 
 .all-players-container::-webkit-scrollbar {
@@ -710,21 +767,16 @@ tr:hover {
 
 .remove-container {
   float: left;
-  margin-left: -2px;
-  width: 7%;
+  width: 10%;
   height: 100%;
+  line-height: 20px;
 }
 
-.remove-inner-container {
-  margin-top: 10%;
-  width: fit-content;
-  height: fit-content;
-  line-height: 6px;
+.remove-favorite {
   border-radius: 100%;
-  transition: 0.2s ease;
 }
 
-.remove-inner-container:hover {
+.remove-favorite:hover {
   cursor: pointer;
   background-color: var(--pale-green);
   color: var(--dark-blue);

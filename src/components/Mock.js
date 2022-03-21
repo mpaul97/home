@@ -12,6 +12,28 @@ import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import Favorites from "./Favorites";
 
+//Team Objects
+class TeamPlayer {
+    constructor(playerType, playerName) {
+        this.playerType = playerType;
+        this.playerName = playerName;
+    }
+}
+  
+class TeamObj {
+    constructor(teamNum, qbs, rbs, wrs, tes, flexes, ks, dsts, bench) {
+        this.teamNum = teamNum;
+        this.qbs = qbs;
+        this.rbs = rbs;
+        this.wrs = wrs;
+        this.tes = tes;
+        this.flexes = flexes;
+        this.ks = ks;
+        this.dsts = dsts;
+        this.bench = bench;
+    }
+}
+
 //Team Info
 const teamInfo = [
     {
@@ -48,6 +70,41 @@ const teamInfo = [
     }
 ]
 
+function initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, benchSize, leagueSize) {
+    let teams = [];
+    for (var i = 0; i < leagueSize; i++) {
+        let team = new TeamObj();
+        //team num
+        team.teamNum = i + 1;
+        //qbs
+        let qbs = Array.from({length: qbSize}, (_, i) => i + 1).map((i) => new TeamPlayer('QB', ''));
+        team.qbs = qbs;
+        //rbs
+        let rbs = Array.from({length: rbSize}, (_, i) => i + 1).map((i) => new TeamPlayer('RB', ''));
+        team.rbs = rbs;
+        //wrs
+        let wrs = Array.from({length: wrSize}, (_, i) => i + 1).map((i) => new TeamPlayer('WR', ''));
+        team.wrs = wrs;
+        //tes
+        let tes = Array.from({length: teSize}, (_, i) => i + 1).map((i) => new TeamPlayer('TE', ''));
+        team.tes = tes;
+        //flexes
+        let flexes = Array.from({length: flexSize}, (_, i) => i + 1).map((i) => new TeamPlayer('FLEX', ''));
+        team.flexes = flexes;
+        //ks
+        let ks = Array.from({length: kSize}, (_, i) => i + 1).map((i) => new TeamPlayer('K', ''));
+        team.ks = ks;
+        //dsts
+        let dsts = Array.from({length: dstSize}, (_, i) => i + 1).map((i) => new TeamPlayer('DST', ''));
+        team.dsts = dsts;
+        //bench
+        let bench = Array.from({length: benchSize}, (_, i) => i + 1).map((i) => new TeamPlayer('BEN', ''));
+        team.bench = bench;
+        teams.push(team);
+    }
+    return teams;
+};
+
 function Mock() {
     //Queue info
     const leagueSize = 12;
@@ -55,17 +112,24 @@ function Mock() {
     const queuePosition = 4;
     const leagueType = 'STD';
 
+    // Build teams
+    const qbSize = 1;
+    const rbSize = 2;
+    const wrSize = 2;
+    const teSize = 1;
+    const flexSize = 1;
+    const kSize = 1;
+    const dstSize = 1;
+    const benchSize = 7;
+
+    const [teamObjs, setTeamObjs] = useState(initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, benchSize, leagueSize));
+
     // Players from JSON
     var allPlayers = JSON.parse(JSON.stringify(tempPlayers));
 
     if (leagueType == 'STD') {
         allPlayers = JSON.parse(JSON.stringify(playersStd));
     }
-
-    const [currDrafter, setCurrDrafter] = useState(1);
-
-    const [startClicked, setStartClicked] = useState(false);
-    const [timerNum, setTimerNum] = useState(10);
 
     const [favPlayers, setFavPlayers] = useState([]);
 
@@ -79,6 +143,13 @@ function Mock() {
     };
 
     // Start timer/draft
+    const [currDrafter, setCurrDrafter] = useState(1);
+
+    const [startClicked, setStartClicked] = useState(false);
+
+    var timerInterval = 2;
+    const [timerNum, setTimerNum] = useState(timerInterval);
+
     const handleStart = () => {
         setStartClicked(true);
     };
@@ -95,17 +166,20 @@ function Mock() {
         };
     });
 
+    const [round, setRound] = useState(1);
+
     //Draft
-    const computerDraft = (teamNum) => {
-        
+    const computerDraft = () => {
+        console.log(typeof allPlayers[0]);
     };
 
     useEffect(() => {
         if (timerNum === 0) {
-            if (queuePosition !== currDrafter) {
-                computerDraft(currDrafter);
+            if (queuePosition !== currDrafter) { //computer
+                computerDraft();
             }
-            setTimerNum(10);
+            setCurrDrafter(currDrafter + 1);
+            setTimerNum(timerInterval);
         }
     })
 
@@ -115,7 +189,13 @@ function Mock() {
                 <h1 className="title">Minute Mock</h1>
                 <div className="header-info">
                     <div className="start-container">
-                        <button className="start-button" onClick={() => handleStart()}>Start</button>
+                        <button 
+                            className="start-button" 
+                            onClick={() => handleStart()}
+                            id={startClicked ? 'hide-start' : ''}
+                        >
+                            Start
+                        </button>
                     </div>
                     <div className="timer-container">
                         <h3 className="timer">
@@ -133,11 +213,12 @@ function Mock() {
             </div>
             <div className="content-container">
                 <div className="team-container">
-                    <h2 className="subtitle">Team {queuePosition} </h2>
                     <div className="team-players-container">
                         <Team 
                             teamInfo={teamInfo}
                             leagueSize={leagueSize}
+                            queuePosition={queuePosition}
+                            teamObjs={teamObjs}
                         />
                     </div>
                 </div>
@@ -146,6 +227,8 @@ function Mock() {
                         fav={handleFavorite}
                         favPlayers={favPlayers}
                         allPlayers={allPlayers}
+                        queuePosition={queuePosition}
+                        currDrafter={currDrafter}
                     />
                 </div>
                 <div className="favorites-container">
