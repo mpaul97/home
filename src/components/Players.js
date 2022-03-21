@@ -172,15 +172,10 @@ function Players({ fav, favPlayers, allPlayers, queuePosition, currDrafter }) {
                     </form>
                 </div>
                 <div className="toggle-drafted-container">
-                    {/* <form className="toggle-drafted-form">
+                    <form className="toggle-drafted-form">
                         <label htmlFor="toggle-drafted">Show Drafted Players</label>
                         <input name="toggle-drafted" type="checkbox"></input>
-                    </form> */}
-                    <label className="toggle-drafted-container">
-                        Show Drafted Players
-                        <input className="toggle-drafted" type="checkbox"></input>
-                        <span className="drafted-checkmark"></span>
-                    </label>
+                    </form>
                 </div>
             </div>
             <div className="players-bottom">

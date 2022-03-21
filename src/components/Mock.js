@@ -168,9 +168,12 @@ function Mock() {
 
     const [round, setRound] = useState(1);
 
-    //Draft
+    //*************************************
+    //Draft Logic
     const computerDraft = () => {
-        console.log(typeof allPlayers[0]);
+        let p = allPlayers[0].name;
+        allPlayers = allPlayers.filter(x => x.name !== p);
+        alert(allPlayers[0].name);
     };
 
     useEffect(() => {
