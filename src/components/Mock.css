@@ -342,7 +342,7 @@
 .content-container {
   display: inline-flex;
   width: 100%;
-  height: fit-content
+  height: fit-content;
 }
 
 /* ----------------------------------------------------- */
@@ -638,7 +638,7 @@
 
 .all-players-container {
   margin: 0px;
-  max-height: 300px;
+  max-height: 288.5px;
   overflow: hidden;
 }
 

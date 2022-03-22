@@ -11,15 +11,17 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import Favorites from "./Favorites";
+import { useForceUpdate } from "framer-motion";
 
-//Team Objects
+//TeamPlayer -> player name and type
 class TeamPlayer {
     constructor(playerType, playerName) {
         this.playerType = playerType;
         this.playerName = playerName;
     }
 }
-  
+
+//AllPlayers
 class TeamObj {
     constructor(teamNum, qbs, rbs, wrs, tes, flexes, ks, dsts, bench) {
         this.teamNum = teamNum;
@@ -70,6 +72,22 @@ const teamInfo = [
     }
 ]
 
+// Display selected team
+function displayTeam(teamObjs, selectedOption) {
+    let selectedTeam = teamObjs.filter(x => x.teamNum === selectedOption);
+    let arr = [];
+    selectedTeam[0].qbs.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].rbs.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].wrs.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].tes.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].flexes.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].ks.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].dsts.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    selectedTeam[0].bench.map((i) => arr.push(i.playerType + ": " + i.playerName));
+    return arr;
+}
+
+//Init team objects
 function initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, benchSize, leagueSize) {
     let teams = [];
     for (var i = 0; i < leagueSize; i++) {
@@ -105,6 +123,24 @@ function initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, ben
     return teams;
 };
 
+function convertTime(time) {
+    var secNum = parseInt(time.toString(), 10);
+    var hours = Math.floor(secNum / 3600);
+    var minutes = Math.floor((secNum - (hours * 3600)) / 60);
+    var seconds = secNum - (hours * 3600) - (minutes * 60);
+
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    return hours + ":" + minutes + ":" + seconds;
+}
+
 function Mock() {
     //Queue info
     const leagueSize = 12;
@@ -125,11 +161,23 @@ function Mock() {
     const [teamObjs, setTeamObjs] = useState(initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, benchSize, leagueSize));
 
     // Players from JSON
-    var allPlayers = JSON.parse(JSON.stringify(tempPlayers));
+    // var jsonPlayers = JSON.parse(JSON.stringify(tempPlayers));
 
-    if (leagueType == 'STD') {
-        allPlayers = JSON.parse(JSON.stringify(playersStd));
-    }
+    // const [allPlayers, setAllPlayers] = useState([]);
+
+    // setAllPlayers(jsonPlayers);
+
+    // if (leagueType == 'STD') {
+    //     jsonPlayers = JSON.parse(JSON.stringify(playersStd));
+    //     setAllPlayers(jsonPlayers);
+    // }
+
+    // Init Players by league type
+    const [allPlayers, setAllPlayers] = useState(() => {
+        if (leagueType === 'STD') {
+            return JSON.parse(JSON.stringify(playersStd));
+        }
+    });
 
     const [favPlayers, setFavPlayers] = useState([]);
 
@@ -168,23 +216,60 @@ function Mock() {
 
     const [round, setRound] = useState(1);
 
-    //*************************************
+    //***************************************************
+    //***************************************************
+    //Team Logic
+
+    const [selectedOption, setSelectedOption] = useState(queuePosition);
+    const [flattenTeamObjs, setFlattenTeamObjs] = useState(displayTeam(teamObjs, selectedOption));
+
+    const handleSelectedOption = (e) => {
+        setSelectedOption(parseInt(e.target.value));
+        setFlattenTeamObjs(displayTeam(teamObjs, parseInt(e.target.value)));
+    }
+
+    //***************************************************
+    //***************************************************
     //Draft Logic
-    const computerDraft = () => {
-        let p = allPlayers[0].name;
-        allPlayers = allPlayers.filter(x => x.name !== p);
-        alert(allPlayers[0].name);
+    const updateTeamObj = (player, teamObj, currDrafter) => {
+        let position = player.position;
+        if (position === 'QB') {
+            
+        } else if (position === 'RB') {
+            for (var i = 0; i < teamObj[0].rbs.length; i++) {
+                if (teamObj[0].rbs[i].playerName === '') {
+                    teamObj[0].rbs[i] = new TeamPlayer('RB', player.name);
+                    break;
+                }
+            }
+        }
+        let index = teamObjs.findIndex(x => x.teamNum === currDrafter);
+        let newTeamObjs = [...teamObjs];
+        newTeamObjs[index] = teamObj;
+        setTeamObjs(newTeamObjs);
+    }
+
+    const computerDraft = (currDrafter) => {
+        let topPlayer = allPlayers[0];
+        let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
+        updateTeamObj(topPlayer, teamObj);
+        setAllPlayers(allPlayers.filter(x => x.name !== topPlayer.name));
     };
 
     useEffect(() => {
+        console.log(convertTime(timerNum));
         if (timerNum === 0) {
             if (queuePosition !== currDrafter) { //computer
-                computerDraft();
+                computerDraft(currDrafter);
+                setTimerNum(timerInterval);
+            } else {
+                setTimerNum(60);
             }
             setCurrDrafter(currDrafter + 1);
-            setTimerNum(timerInterval);
         }
     })
+
+    //***************************************************
 
     return (
         <div className="mock-container">
@@ -222,6 +307,9 @@ function Mock() {
                             leagueSize={leagueSize}
                             queuePosition={queuePosition}
                             teamObjs={teamObjs}
+                            selectedOption={selectedOption}
+                            handleSelectedOption={handleSelectedOption}
+                            flattenTeamObjs={flattenTeamObjs}
                         />
                     </div>
                 </div>
@@ -229,9 +317,9 @@ function Mock() {
                     <Player 
                         fav={handleFavorite}
                         favPlayers={favPlayers}
-                        allPlayers={allPlayers}
                         queuePosition={queuePosition}
                         currDrafter={currDrafter}
+                        allPlayers={allPlayers}
                     />
                 </div>
                 <div className="favorites-container">

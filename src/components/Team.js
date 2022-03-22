@@ -11,24 +11,10 @@ function getTeamInfo(teamInfo) {
     return arr;
 }
 
-function displayTeam(teamObjs, selectedOption) {
-    let selectedTeam = teamObjs.filter(x => x.teamNum === selectedOption);
-    let arr = [];
-    selectedTeam[0].qbs.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].rbs.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].wrs.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].tes.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].flexes.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].ks.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].dsts.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    selectedTeam[0].bench.map((i) => arr.push(i.playerType + ": " + i.playerName));
-    return arr;
-}
-
-function Team({ teamInfo, leagueSize, queuePosition, teamObjs }) {
+function Team({ teamInfo, leagueSize, queuePosition, teamObjs, selectedOption, handleSelectedOption, flattenTeamObjs }) {
 
     const infoArr = getTeamInfo(teamInfo);
-    const [selectedOption, setSelectedOption] = useState(queuePosition);
+    // const [selectedOption, setSelectedOption] = useState(queuePosition);
 
     // const renderTeam = infoArr.map((i) => 
     //     <li key={i + Math.random()} className="list-element team">
@@ -36,7 +22,7 @@ function Team({ teamInfo, leagueSize, queuePosition, teamObjs }) {
     //     </li>
     // );
 
-    const [flattenTeamObjs, setFlattenTeamObjs] = useState(displayTeam(teamObjs, selectedOption));
+    // const [flattenTeamObjs, setFlattenTeamObjs] = useState(displayTeam(teamObjs, selectedOption));
 
     const renderTeams = flattenTeamObjs.map((i) => 
         <li key={i + Math.random()} className="list-element team">
@@ -46,7 +32,7 @@ function Team({ teamInfo, leagueSize, queuePosition, teamObjs }) {
 
     const renderOptions = Array.from({length: leagueSize}, (_, i) => i + 1).map((i) => 
         <option 
-            key={"Team " + i} 
+            key={"Team " + i}
             value={i}
         >
             {"Team " + i}
@@ -63,7 +49,7 @@ function Team({ teamInfo, leagueSize, queuePosition, teamObjs }) {
                 <form>
                     <select 
                         value={selectedOption}
-                        onChange={(e) => setSelectedOption(parseInt(e.target.value))}
+                        onChange={(e) => handleSelectedOption(e)}
                         name="team-select" 
                         className="team-select"
                     >

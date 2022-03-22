@@ -76,7 +76,7 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players({ fav, favPlayers, allPlayers, queuePosition, currDrafter }) {
+function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers }) {
 
     //Players
     const [players, setPlayers] = useState([]);
@@ -107,7 +107,7 @@ function Players({ fav, favPlayers, allPlayers, queuePosition, currDrafter }) {
         
     });
 
-    allPlayers = getCurrentPlayers(activePosition, allPlayers);
+    var activePlayers = getCurrentPlayers(activePosition, allPlayers);
 
     const [selectedPlayer, setSelectedPlayer] = useState(allPlayers[0].name);
     const [selectedPlayerPoints, setSelectedPlayerPoints] = useState(allPlayers[0].lastSeasonPoints);
@@ -117,7 +117,7 @@ function Players({ fav, favPlayers, allPlayers, queuePosition, currDrafter }) {
         setSelectedPlayerPoints(player.lastSeasonPoints);
     };
 
-    const renderPlayers = allPlayers.map((i) => 
+    const renderPlayers = activePlayers.map((i) => 
         <tr 
             onClick={() => handleClick(i)} 
             className="table-rows" 
