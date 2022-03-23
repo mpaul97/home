@@ -151,7 +151,7 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, hand
                         className="draft-button"
                         disabled={queuePosition !== currDrafter ? true : false}
                         id={queuePosition !== currDrafter ? 'disabled-button' : ''}
-                        onClick={() => handleUserDraft()}
+                        onClick={(selectedPlayer) => handleUserDraft(selectedPlayer)}
                     >
                         Draft
                     </button>

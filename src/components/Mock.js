@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import Favorites from "./Favorites";
-import { useForceUpdate } from "framer-motion";
+import { useForceUpdate, useTime } from "framer-motion";
 
 //*********************************************** */
 //****************** Classes ******************** */
@@ -233,8 +233,16 @@ function Mock() {
 
     const [startClicked, setStartClicked] = useState(false);
 
-    var timerInterval = 2;
-    const [timerNum, setTimerNum] = useState(timerInterval);
+    var allTimerInterval;
+    var computerTime = 2;
+    var userTime = 60;
+
+    if (queuePosition === 1) {
+        allTimerInterval = userTime;
+    } else {
+        allTimerInterval = computerTime;
+    }
+    const [timerNum, setTimerNum] = useState(allTimerInterval);
 
     const handleStart = () => {
         setStartClicked(true);
@@ -294,20 +302,37 @@ function Mock() {
         setAllPlayers(allPlayers.filter(x => x.name !== topPlayer.name));
     };
 
-    const handleUserDraft = () => {
-
+    const handleUserDraft = (selectedPlayer) => {
+        console.log(selectedPlayer);
     };
 
     useEffect(() => {
-        if (timerNum === -1) {
-            if (queuePosition !== (currDrafter + 1)) { //computer
+        // if (timerNum === -1) {
+        //     setCurrDrafter((currDrafter) => {
+        //         if (queuePosition !== currDrafter) { //computer
+        //             computerDraft(currDrafter);
+        //             setTimerNum(allTimerInterval);
+        //             // shiftQueue(currDrafter, round);
+        //         } else { //user draft
+        //             setTimerNum(60);
+        //         }
+        //         return currDrafter;
+        //     });
+        //     setCurrDrafter(currDrafter + 1);
+        // }
+        if (currDrafter !== queuePosition) {
+            if (timerNum === -1) {
                 computerDraft(currDrafter);
-                setTimerNum(timerInterval);
-                // shiftQueue(currDrafter, round);
-            } else { //user draft
-                setTimerNum(60);
+                setCurrDrafter(currDrafter + 1);
+                if (currDrafter !== (queuePosition - 1)) {
+                    setTimerNum(computerTime);
+                }
             }
-            setCurrDrafter(currDrafter + 1);
+        }
+        if (currDrafter === queuePosition) {
+            if (timerNum === -1) {
+                setTimerNum(userTime);
+            }
         }
     });
 
