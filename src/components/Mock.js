@@ -129,16 +129,13 @@ function convertTime(time) {
     var minutes = Math.floor((secNum - (hours * 3600)) / 60);
     var seconds = secNum - (hours * 3600) - (minutes * 60);
 
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
+    // if (minutes < 10) {
+    //     minutes = "0" + minutes;
+    // }
     if (seconds < 10) {
         seconds = "0" + seconds;
     }
-    return hours + ":" + minutes + ":" + seconds;
+    return minutes + ":" + seconds;
 }
 
 function Mock() {
@@ -257,15 +254,15 @@ function Mock() {
     };
 
     useEffect(() => {
-        console.log(convertTime(timerNum));
-        if (timerNum === 0) {
+        if (timerNum === -1) {
             if (queuePosition !== currDrafter) { //computer
                 computerDraft(currDrafter);
                 setTimerNum(timerInterval);
             } else {
                 setTimerNum(60);
             }
-            setCurrDrafter(currDrafter + 1);
+            setCurrDrafter(currDraftcurrDrafter + 1);
+            console.log(currDrafter);
         }
     })
 
@@ -287,7 +284,7 @@ function Mock() {
                     </div>
                     <div className="timer-container">
                         <h3 className="timer">
-                            0:{timerNum.toString().length===1 ? "0" + timerNum : timerNum}
+                            {timerNum !== -1 ? convertTime(timerNum) : '0:00'}
                         </h3>
                     </div>
                 </div>

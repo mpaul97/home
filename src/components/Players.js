@@ -151,6 +151,7 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers }) {
                         className="draft-button"
                         disabled={queuePosition !== currDrafter ? true : false}
                         id={queuePosition !== currDrafter ? 'disabled-button' : ''}
+                        
                     >
                         Draft
                     </button>
