@@ -13,6 +13,8 @@ import { collection, getDocs } from "firebase/firestore";
 import Favorites from "./Favorites";
 import { useForceUpdate } from "framer-motion";
 
+//*********************************************** */
+//****************** Classes ******************** */
 //TeamPlayer -> player name and type
 class TeamPlayer {
     constructor(playerType, playerName) {
@@ -35,6 +37,16 @@ class TeamObj {
         this.bench = bench;
     }
 }
+
+class QueueObj {
+    constructor(round, queueVal) {
+        this.round = round;
+        this.queueVal = queueVal;
+    }
+}
+
+//*********************************************** */
+//*********************************************** */
 
 //Team Info
 const teamInfo = [
@@ -87,7 +99,7 @@ function displayTeam(teamObjs, selectedOption) {
     return arr;
 }
 
-//Init team objects
+// Init team objects
 function initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, benchSize, leagueSize) {
     let teams = [];
     for (var i = 0; i < leagueSize; i++) {
@@ -123,6 +135,7 @@ function initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, ben
     return teams;
 };
 
+// int time to String
 function convertTime(time) {
     var secNum = parseInt(time.toString(), 10);
     var hours = Math.floor(secNum / 3600);
@@ -138,12 +151,40 @@ function convertTime(time) {
     return minutes + ":" + seconds;
 }
 
+// Build queue array
+function buildQueueArray(leagueSize, playersSize) {
+    let arr = [];
+    arr.push(new QueueObj(1, 'Round 1'));
+    for (var i = 0; i < playersSize; i++) {
+        if (i % 2 === 0) {
+            for (var j = 1; j < leagueSize + 1; j++) {
+                arr.push(new QueueObj(i + 1, j));
+            }
+        } else {
+            for (var j = leagueSize; j > 0; j--) {
+                arr.push(new QueueObj(i + 1, j));
+            }
+        }
+        if (i != playersSize - 1) {
+            arr.push(new QueueObj(i + 2, -1));
+            arr.push(new QueueObj(i + 2, 'Round ' + (i + 2)));
+        }
+    }
+    return arr;
+}
+
 function Mock() {
     //Queue info
     const leagueSize = 12;
     const playersSize = 2;
-    const queuePosition = 4;
+    const queuePosition = 3;
     const leagueType = 'STD';
+
+    const [queueArr, setQueueArr] = useState(buildQueueArray(leagueSize, playersSize));
+
+    const shiftQueue = (currDrafter, round) => {
+        // setQueueArr(queueArr.filter(x => x.queueVal !== currDrafter && x.round !== round));
+    };
 
     // Build teams
     const qbSize = 1;
@@ -253,18 +294,22 @@ function Mock() {
         setAllPlayers(allPlayers.filter(x => x.name !== topPlayer.name));
     };
 
+    const handleUserDraft = () => {
+
+    };
+
     useEffect(() => {
         if (timerNum === -1) {
-            if (queuePosition !== currDrafter) { //computer
+            if (queuePosition !== (currDrafter + 1)) { //computer
                 computerDraft(currDrafter);
                 setTimerNum(timerInterval);
-            } else {
+                // shiftQueue(currDrafter, round);
+            } else { //user draft
                 setTimerNum(60);
             }
-            setCurrDrafter(currDraftcurrDrafter + 1);
-            console.log(currDrafter);
+            setCurrDrafter(currDrafter + 1);
         }
-    })
+    });
 
     //***************************************************
 
@@ -291,9 +336,8 @@ function Mock() {
             </div>
             <div className="player-queue">
                 <PlayerQueue
-                    leagueSize={leagueSize}
-                    playersSize={playersSize}
                     queuePosition={queuePosition}
+                    queueArr={queueArr}
                 />
             </div>
             <div className="content-container">
@@ -317,6 +361,7 @@ function Mock() {
                         queuePosition={queuePosition}
                         currDrafter={currDrafter}
                         allPlayers={allPlayers}
+                        handleUserDraft={handleUserDraft}
                     />
                 </div>
                 <div className="favorites-container">

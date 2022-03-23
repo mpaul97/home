@@ -76,7 +76,7 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers }) {
+function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, handleUserDraft }) {
 
     //Players
     const [players, setPlayers] = useState([]);
@@ -151,7 +151,7 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers }) {
                         className="draft-button"
                         disabled={queuePosition !== currDrafter ? true : false}
                         id={queuePosition !== currDrafter ? 'disabled-button' : ''}
-                        
+                        onClick={() => handleUserDraft()}
                     >
                         Draft
                     </button>

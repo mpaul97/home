@@ -1,6 +1,5 @@
 import HorizontalScroll from "react-scroll-horizontal";
 import cx from 'classnames';
-import { scryRenderedComponentsWithType } from "react-dom/test-utils";
 
 function buildArray(leagueSize, playersSize) {
     let arr = [];
@@ -22,26 +21,26 @@ function buildArray(leagueSize, playersSize) {
     return arr;
 }
 
-function PlayerQueue({ leagueSize, playersSize, queuePosition }) {
+function PlayerQueue({ queuePosition, queueArr }) {
 
     const childScroll   = { width: `40px`, height: `40px`};
     const parentScroll  = { width: `100%`, height: `52px`};
 
-    const queueArr = buildArray(leagueSize, playersSize);
-    queueArr.unshift('Round 1');
+    // const queueArr = buildArray(leagueSize, playersSize);
+    // queueArr.unshift('Round 1');
 
     const renderQueue = queueArr.map((i) => 
-        <li key={i + " " + Math.random()} className="list-element queue">
+        <li key={i.round + ":" + i.queueVal} className="list-element queue">
             <div 
                 style={childScroll}
                 className={cx("queue-element-container", {
-                    'partition' : i === -1,
-                    'round' : i.toString().includes('Round'),
-                    'first-round' : i.toString() === 'Round 1'
+                    'partition' : i.queueVal === -1,
+                    'round' : i.queueVal.toString().includes('Round'),
+                    'first-round' : i.queueVal.toString() === 'Round 1'
                 })}
-                id={i===queuePosition ? 'active' : ''}
+                id={i.queueVal===queuePosition ? 'active' : ''}
             >
-                {i}
+                {i.queueVal}
             </div>
         </li>
     );
