@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { render } from "@testing-library/react";
 import { useState } from 'react';
 import './Home.css';
-import HomeButton from './HomeButton';
-import QueueButton from './QueueButton';
+import HomeButton from '../components/HomeButton';
+import QueueButton from '../components/QueueButton';
 import cx from 'classnames';
-import PlayerInput from './PlayerInput';
+import PlayerInput from '../components/PlayerInput';
 
 const sizes = [8, 10, 12, 14];
 const types = ['Standard', 'PPR', 'Non-PPR'];

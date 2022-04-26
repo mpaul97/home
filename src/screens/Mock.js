@@ -1,16 +1,16 @@
 import "./Mock.css";
-import PlayerQueue from "./PlayerQueue";
-import Team from "./Team";
-import Player from "./Players";
+import PlayerQueue from "../components/PlayerQueue";
+import Team from "../components/Team";
+import Player from "../components/Players";
 import tempPlayers from '../assets/placeholder.json';
 import playersStd from '../assets/tempData_std.json';
 import playersPpr from '../assets/tempData_ppr.json';
 import playersHalf from '../assets/tempData_half.json';
 import playersKings from '../assets/tempData_kings.json';
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
-import Favorites from "./Favorites";
+import Favorites from "../components/Favorites";
 import { useForceUpdate, useTime } from "framer-motion";
 
 //*********************************************** */
@@ -165,7 +165,7 @@ function buildQueueArray(leagueSize, playersSize) {
                 arr.push(new QueueObj(i + 1, j));
             }
         }
-        if (i != playersSize - 1) {
+        if (i !== playersSize - 1) {
             arr.push(new QueueObj(i + 2, -1));
             arr.push(new QueueObj(i + 2, 'Round ' + (i + 2)));
         }
@@ -177,12 +177,16 @@ function Mock() {
     //Queue info
     const leagueSize = 12;
     const playersSize = 2;
-    const queuePosition = 3;
+    const queuePosition = 2;
     const leagueType = 'STD';
 
     const [queueArr, setQueueArr] = useState(buildQueueArray(leagueSize, playersSize));
 
     const shiftQueue = (currDrafter, round) => {
+        let temp = queueArr;
+        let index = temp.findIndex(x => x.queueVal === currDrafter && x.round === round);
+        temp.splice(index, 1);
+        setQueueArr(temp);
         // setQueueArr(queueArr.filter(x => x.queueVal !== currDrafter && x.round !== round));
     };
 
@@ -235,7 +239,7 @@ function Mock() {
 
     var allTimerInterval;
     var computerTime = 2;
-    var userTime = 60;
+    var userTime = 5;
 
     if (queuePosition === 1) {
         allTimerInterval = userTime;
@@ -291,47 +295,46 @@ function Mock() {
         }
         let index = teamObjs.findIndex(x => x.teamNum === currDrafter);
         let newTeamObjs = [...teamObjs];
-        newTeamObjs[index] = teamObj;
+        newTeamObjs[index] = teamObj[0];
         setTeamObjs(newTeamObjs);
+        setFlattenTeamObjs(displayTeam(newTeamObjs, selectedOption));
     }
 
-    const computerDraft = (currDrafter) => {
+    const handleComputerDraft = () => {
         let topPlayer = allPlayers[0];
         let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
-        updateTeamObj(topPlayer, teamObj);
+        updateTeamObj(topPlayer, teamObj, currDrafter);
         setAllPlayers(allPlayers.filter(x => x.name !== topPlayer.name));
     };
 
     const handleUserDraft = (selectedPlayer) => {
-        console.log(selectedPlayer);
+        let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
+        updateTeamObj(selectedPlayer, teamObj, currDrafter);
+        setAllPlayers(allPlayers.filter(x => x.name !== selectedPlayer.name));
+        setTimerNum(-1);
     };
 
     useEffect(() => {
-        // if (timerNum === -1) {
-        //     setCurrDrafter((currDrafter) => {
-        //         if (queuePosition !== currDrafter) { //computer
-        //             computerDraft(currDrafter);
-        //             setTimerNum(allTimerInterval);
-        //             // shiftQueue(currDrafter, round);
-        //         } else { //user draft
-        //             setTimerNum(60);
-        //         }
-        //         return currDrafter;
-        //     });
-        //     setCurrDrafter(currDrafter + 1);
-        // }
-        if (currDrafter !== queuePosition) {
+        if (startClicked) {
             if (timerNum === -1) {
-                computerDraft(currDrafter);
-                setCurrDrafter(currDrafter + 1);
-                if (currDrafter !== (queuePosition - 1)) {
-                    setTimerNum(computerTime);
+                if (currDrafter !== queuePosition) {
+                    handleComputerDraft();
+                    setCurrDrafter(currDrafter + 1);
+                    shiftQueue(currDrafter, round);
+                    if ((currDrafter + 1) !== queuePosition) {
+                        setTimerNum(computerTime);
+                    } else {
+                        setTimerNum(userTime);
+                    }
+                } else {
+                    setCurrDrafter(currDrafter + 1);
+                    shiftQueue(currDrafter, round);
+                    if ((currDrafter + 1) !== queuePosition) {
+                        setTimerNum(computerTime);
+                    } else {
+                        setTimerNum(userTime);
+                    }
                 }
-            }
-        }
-        if (currDrafter === queuePosition) {
-            if (timerNum === -1) {
-                setTimerNum(userTime);
             }
         }
     });
@@ -387,6 +390,7 @@ function Mock() {
                         currDrafter={currDrafter}
                         allPlayers={allPlayers}
                         handleUserDraft={handleUserDraft}
+                        startClicked={startClicked}
                     />
                 </div>
                 <div className="favorites-container">
