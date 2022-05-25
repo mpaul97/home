@@ -153,7 +153,87 @@ function getPlayerRound1(data) {
 
 function getPlayerRest(team, data) {
     var pos = getMaxNeed(team.needs).positionAbbr;
+    var playerIndex = 0;
+    if (pos === 'q') {
+        var temp = data.filter(x => x.position === 'QB');
+        temp = temp.sort(x => x.positionRanking);
+        playerIndex = data.findIndex(x => x.name === temp[0].name);
+    } else if (pos === 'r') {
+        var temp = data.filter(x => x.position === 'RB');
+        temp = temp.sort(x => x.positionRanking);
+        playerIndex = data.findIndex(x => x.name === temp[0].name);
+    } else if (pos === 'w') {
+        var temp = data.filter(x => x.position === 'WR');
+        temp = temp.sort(x => x.positionRanking);
+        playerIndex = data.findIndex(x => x.name === temp[0].name);
+    } else if (pos === 't') {
+        var temp = data.filter(x => x.position === 'TE');
+        temp = temp.sort(x => x.positionRanking);
+        playerIndex = data.findIndex(x => x.name === temp[0].name);
+    } else if (pos === 'k') {
+        var temp = data.filter(x => x.position === 'K');
+        temp = temp.sort(x => x.positionRanking);
+        playerIndex = data.findIndex(x => x.name === temp[0].name);
+    } else if (pos === 'd') {
+        var temp = data.filter(x => x.position === 'DST');
+        temp = temp.sort(x => x.positionRanking);
+        playerIndex = data.findIndex(x => x.name === temp[0].name);
+    };
+    return playerIndex;
 };
+
+// NEEDS **********************************/
+//*************************************** */
+
+function getMissingQbs(team) {
+    var count = 0;
+    for (var i = 0; i < team.qbs.length; i++) {
+        if (team.qbs[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['q', team.qbs.length - count];
+}
+
+function getMissingRbs(team) {
+    var count = 0;
+    for (var i = 0; i < team.rbs.length; i++) {
+        if (team.rbs[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['r', team.rbs.length - count];
+}
+
+function getMissingWrs(team) {
+    var count = 0;
+    for (var i = 0; i < team.wrs.length; i++) {
+        if (team.wrs[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['w', team.wrs.length - count];
+}
+
+function getMissingTes(team) {
+    var count = 0;
+    for (var i = 0; i < team.tes.length; i++) {
+        if (team.tes[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['t', team.tes.length - count];
+}
+
+function getMissingTes(team) {
+    var count = 0;
+    for (var i = 0; i < team.tes.length; i++) {
+        if (team.tes[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['t', team.tes.length - count];
+}
 
 //*************************************** */
 
@@ -177,7 +257,12 @@ var teams = initTeams(leagueSize, posSizes);
 
 var tempTeam = teams[0];
 
-getPlayerRest(tempTeam, data);
+// var playerIndex = getPlayerRest(tempTeam, data);
+// var player = data[playerIndex];
+
+var t = getMissingWrs(tempTeam);
+
+console.log(t);
 
 //*************************************** */
 
