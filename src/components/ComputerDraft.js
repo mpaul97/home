@@ -225,14 +225,88 @@ function getMissingTes(team) {
     return ['t', team.tes.length - count];
 }
 
-function getMissingTes(team) {
+function getMissingFlexes(team) {
     var count = 0;
-    for (var i = 0; i < team.tes.length; i++) {
-        if (team.tes[i].playerName.length !== 0) {
+    for (var i = 0; i < team.flexes.length; i++) {
+        if (team.flexes[i].playerName.length !== 0) {
             count++;
         }
     };
-    return ['t', team.tes.length - count];
+    return ['f', team.flexes.length - count];
+}
+
+function getMissingKs(team) {
+    var count = 0;
+    for (var i = 0; i < team.ks.length; i++) {
+        if (team.ks[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['k', team.ks.length - count];
+}
+
+function getMissingDsts(team) {
+    var count = 0;
+    for (var i = 0; i < team.dsts.length; i++) {
+        if (team.dsts[i].playerName.length !== 0) {
+            count++;
+        }
+    };
+    return ['d', team.dsts.length - count];
+}
+
+function getMissingStarters(team) {
+    var missing = [];
+    missing.push(getMissingQbs(team));
+    missing.push(getMissingRbs(team));
+    missing.push(getMissingWrs(team));
+    missing.push(getMissingTes(team));
+    missing.push(getMissingFlexes(team));
+    missing.push(getMissingKs(team));
+    missing.push(getMissingDsts(team));
+    return missing;
+}
+
+function benchFull(team) {
+    var count = 0;
+    var bench = team.bench;
+    for (var b of bench) {
+        if (b.playerName.length !== 0) {
+            count++;
+        }
+    }
+    if (count === bench.length) {
+        return true;
+    }
+    return false;
+}
+
+function getPosLength(team, pos) {
+    if (pos === 'q') {
+        return team.qbs.length;
+    } else if (pos === 'r') {
+        return team.rbs.length;
+    } else if (pos === 'w') {
+        return team.wrs.length;
+    } else if (pos === 't') {
+        return team.tes.length;
+    } else if (pos === 'f') {
+        return team.flexes.length;
+    } else if (pos === 'k') {
+        return team.ks.length;
+    } else if (pos === 'd') {
+        return team.dsts.length;
+    }
+    return -1;
+}
+
+function updateNeeds(team, pos, round, playersSize) {
+    var earlyRoundPositions = ['q', 'r', 'w', 't'];
+    var needs = team.needs;
+    for (var i = 0; i < needs.length; i++) {
+        var n = needs[i];
+        console.log(n.positionAbbr);
+    }
 }
 
 //*************************************** */
@@ -260,9 +334,7 @@ var tempTeam = teams[0];
 // var playerIndex = getPlayerRest(tempTeam, data);
 // var player = data[playerIndex];
 
-var t = getMissingWrs(tempTeam);
-
-console.log(t);
+updateNeeds(tempTeam, 'r', 2, playersSize);
 
 //*************************************** */
 
