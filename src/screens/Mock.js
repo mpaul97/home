@@ -164,7 +164,7 @@ function getPlayerRound1Top3(data) {
     var randomArr = choice(top3, 3, [0.7, 0.2, 0.1]);
     var playerIndex = randomArr[0];
     var player = data[playerIndex];
-    return [player, playerIndex];
+    return player;
 };
 
 function getPlayerRound1(data) {
@@ -172,7 +172,7 @@ function getPlayerRound1(data) {
     var randomArr = choice(top10, 10, [0.3, 0.2, 0.115, 0.1, 0.085, 0.065, 0.055, 0.045, 0.025, 0.01]);
     var playerIndex = randomArr[0];
     var player = data[playerIndex];
-    return [player, playerIndex];
+    return  player;
 };
 
 function getPlayerRest(team, data) {
@@ -619,6 +619,12 @@ function Mock() {
         }
     });
 
+    const [unalteredPlayers, setUnalteredPlayers] = useState(() => {
+        if (leagueType === 'STD') {
+            return JSON.parse(JSON.stringify(playersStd));
+        }
+    });
+
     const [favPlayers, setFavPlayers] = useState([]);
 
     //Set Player on Favorite
@@ -740,7 +746,24 @@ function Mock() {
         var emptyPositions = findEmptyPositions(teamObj[0]);
         let position = player.position;
         if (position === 'QB') {
-            
+            if (emptyPositions[getEmptyIndex('q')] !== 0) {
+                for (var i = 0; i < teamObj[0].qbs.length; i++) {
+                    if (teamObj[0].qbs[i].playerName === '') {
+                        teamObj[0].qbs[i] = new TeamPlayer('QB', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('b')] !== 0) {
+                for (var i = 0; i < teamObj[0].bench.length; i++) {
+                    if (teamObj[0].bench[i].playerName === '') {
+                        teamObj[0].bench[i] = new TeamPlayer('BEN', player.name);
+                        break;
+                    }
+                }
+            } else {
+                alert(position, " filled!");
+            }
+        // end QB
         } else if (position === 'RB') {
             if (emptyPositions[getEmptyIndex('r')] !== 0) {
                 for (var i = 0; i < teamObj[0].rbs.length; i++) {
@@ -756,7 +779,107 @@ function Mock() {
                         break;
                     }
                 };
-            };
+            } else if (emptyPositions[getEmptyIndex('b')] !== 0) {
+                for (var i = 0; i < teamObj[0].bench.length; i++) {
+                    if (teamObj[0].bench[i].playerName === '') {
+                        teamObj[0].bench[i] = new TeamPlayer('BEN', player.name);
+                        break;
+                    }
+                }
+            } else {
+                alert(position, " filled!");
+            }
+        // end RB
+        } else if (position === 'WR') {
+            if (emptyPositions[getEmptyIndex('w')] !== 0) {
+                for (var i = 0; i < teamObj[0].wrs.length; i++) {
+                    if (teamObj[0].wrs[i].playerName === '') {
+                        teamObj[0].wrs[i] = new TeamPlayer('WR', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('f')] !== 0) {
+                for (var i = 0; i < teamObj[0].flexes.length; i++) {
+                    if (teamObj[0].flexes[i].playerName === '') {
+                        teamObj[0].flexes[i] = new TeamPlayer('FLEX', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('b')] !== 0) {
+                for (var i = 0; i < teamObj[0].bench.length; i++) {
+                    if (teamObj[0].bench[i].playerName === '') {
+                        teamObj[0].bench[i] = new TeamPlayer('BEN', player.name);
+                        break;
+                    }
+                }
+            } else {
+                alert(position, " filled!");
+            }
+        // end WR
+        } else if (position === 'TE') {
+            if (emptyPositions[getEmptyIndex('t')] !== 0) {
+                for (var i = 0; i < teamObj[0].tes.length; i++) {
+                    if (teamObj[0].tes[i].playerName === '') {
+                        teamObj[0].tes[i] = new TeamPlayer('TE', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('f')] !== 0) {
+                for (var i = 0; i < teamObj[0].flexes.length; i++) {
+                    if (teamObj[0].flexes[i].playerName === '') {
+                        teamObj[0].flexes[i] = new TeamPlayer('FLEX', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('b')] !== 0) {
+                for (var i = 0; i < teamObj[0].bench.length; i++) {
+                    if (teamObj[0].bench[i].playerName === '') {
+                        teamObj[0].bench[i] = new TeamPlayer('BEN', player.name);
+                        break;
+                    }
+                }
+            } else {
+                alert(position, " filled!");
+            }
+        // end TE
+        } else if (position === 'K') {
+            if (emptyPositions[getEmptyIndex('k')] !== 0) {
+                for (var i = 0; i < teamObj[0].ks.length; i++) {
+                    if (teamObj[0].ks[i].playerName === '') {
+                        teamObj[0].ks[i] = new TeamPlayer('K', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('b')] !== 0) {
+                for (var i = 0; i < teamObj[0].bench.length; i++) {
+                    if (teamObj[0].bench[i].playerName === '') {
+                        teamObj[0].bench[i] = new TeamPlayer('BEN', player.name);
+                        break;
+                    }
+                }
+            } else {
+                alert(position, " filled!");
+            }
+        // end K
+        } else if (position === 'DST') {
+            if (emptyPositions[getEmptyIndex('d')] !== 0) {
+                for (var i = 0; i < teamObj[0].dsts.length; i++) {
+                    if (teamObj[0].dsts[i].playerName === '') {
+                        teamObj[0].dsts[i] = new TeamPlayer('DST', player.name);
+                        break;
+                    }
+                };
+            } else if (emptyPositions[getEmptyIndex('b')] !== 0) {
+                for (var i = 0; i < teamObj[0].bench.length; i++) {
+                    if (teamObj[0].bench[i].playerName === '') {
+                        teamObj[0].bench[i] = new TeamPlayer('BEN', player.name);
+                        break;
+                    }
+                }
+            } else {
+                alert(position, " filled!");
+            }
+        // end DST
         }
         let index = teamObjs.findIndex(x => x.teamNum === currDrafter);
         let newTeamObjs = [...teamObjs];
@@ -766,6 +889,12 @@ function Mock() {
     }
 
     const handleComputerDraft = () => {
+        let player = allPlayers[0];
+        if (round === 1) {
+            if (currDrafter <= 3) {
+                player = getPlayerRound1Top3(allPlayers);
+            }
+        }
         let topPlayer = allPlayers[0];
         let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
         updateTeamObj(topPlayer, teamObj, currDrafter);
