@@ -6,8 +6,7 @@ function App() {
   return (
     <div className='container'>
       {/* <Home /> */}
-      {/* <Mock /> */}
-      <ComputerDraft />
+      <Mock />
     </div>
   )
 }

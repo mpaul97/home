@@ -305,8 +305,108 @@ function updateNeeds(team, pos, round, playersSize) {
     var needs = team.needs;
     for (var i = 0; i < needs.length; i++) {
         var n = needs[i];
-        console.log(n.positionAbbr);
+        var abbr = n.positionAbbr;
+        var weight = n.weight;
+        if (getPosLength(team, abbr) > 0) {
+            if (abbr === pos) {
+                team.needs[i] = new Need(abbr, weight - randomFloatInRange(0, 0.1));
+            }
+            if (abbr !== pos && round <= 5) {
+                if (earlyRoundPositions.includes(abbr)) {
+                    team.needs[i] = new Need(abbr, weight + randomFloatInRange(0, 0.1));
+                }
+            } else if (abbr !== pos && round > 5) {
+                team.needs[i] = new Need(abbr, weight + randomFloatInRange(0, 0.1));
+            }
+        }
     }
+    if (benchFull(team)) {
+        var i = team.needs.map(x => x.positionAbbr).indexOf(pos);
+        team.needs[i] = new Need(pos, 0);
+        var missing = getMissingStarters(team);
+        for (var m of missing) {
+            var abbr = m[0];
+            var val = m[1];
+            if (val !== 0) {
+                var index = team.needs.map(x => x.positionAbbr).indexOf(abbr);
+                team.needs[index] = new Need(abbr, 5);
+            }
+        }
+    }
+    return team;
+}
+
+//*************************************** */
+//*************** GRADES **************** */
+//*************************************** */
+
+function sum(arr) {
+    return arr.reduce((a, b) => a + b, 0);
+}
+
+function deviation(arr, mean) {
+    arr = arr.map((x) => { return (x - mean)**2 });
+    var temp = sum(arr);
+    return Math.sqrt(temp / arr.length);
+}
+
+function getGrades(points) {
+    var points = points.map(x => isNaN(x) ? 0 : x);
+    var grades = [];
+    var pointSum = sum(points);
+    var mean = pointSum / points.length;
+    var dev = deviation(points, mean);
+    for (var p of points) {
+        var temp = p - mean;
+        temp /= dev;
+        if (temp <= -1.5) {
+            grades.push([p, 'F']);
+        } else if (temp > -1.5 && temp <= -1.0) {
+            grades.push([p, 'D']);
+        } else if (temp > -1.0 && temp <= 0) {
+            grades.push([p, 'C']);
+        } else if (temp > 0 && temp <= 0.5) {
+            grades.push([p, 'B']);
+        } else if (temp > 0.5) {
+            grades.push([p, 'A']);
+        }
+    }
+    return grades;
+}
+
+function getAllPlayerNames(team) {
+    var names = [];
+    var q = team.qbs.filter(x => x.playerName.length !== 0);
+    var r = team.rbs.filter(x => x.playerName.length !== 0);
+    var w = team.wrs.filter(x => x.playerName.length !== 0);
+    var t = team.tes.filter(x => x.playerName.length !== 0);
+    var f = team.flexes.filter(x => x.playerName.length !== 0);
+    var k = team.ks.filter(x => x.playerName.length !== 0);
+    var d = team.dsts.filter(x => x.playerName.length !== 0);
+    var b = team.bench.filter(x => x.playerName.length !== 0);
+    names = names.concat(q, r, w, t, f, k, d, b);
+    return names;
+}
+
+function getRatings(teams, data) {
+    var allPoints = [];
+    for (var i = 0; i < teams.length; i++) {
+        var teamPoints = [];
+        var playerNames = getAllPlayerNames(teams[i]);
+        for (var p of playerNames) {
+            var player = data.filter(x => x.name===p.playerName);
+            teamPoints.push(player[0]['lastSeasonPoints']);
+        }
+        var temp = sum(teamPoints);
+        var avg = temp / teamPoints.length;
+        allPoints.push(avg);
+    };
+    var grades = getGrades(allPoints);
+    var gradeObjects = [];
+    for (var i = 0; i < grades.length; i++) {
+        gradeObjects.push([i+1, grades[i][1]]);
+    };
+    return gradeObjects;
 }
 
 //*************************************** */
@@ -319,31 +419,37 @@ function updateNeeds(team, pos, round, playersSize) {
 // var kSize = 1;
 // var dSize = 1;
 // var bSize = 7;
-var leagueSize = 12;
-//             q   r  w  t  f  k  d  b
-var posSizes = [1, 2, 2, 1, 1, 1, 1, 7];
+// var leagueSize = 12;
+// //             q   r  w  t  f  k  d  b
+// var posSizes = [1, 2, 2, 1, 1, 1, 1, 7];
 
-var playersSize = posSizes.reduce((a, b) => a + b, 0);
+// var playersSize = posSizes.reduce((a, b) => a + b, 0);
 
-var data = JSON.parse(JSON.stringify(playersStd));
+// var data = JSON.parse(JSON.stringify(playersStd));
+// var unalteredData = JSON.parse(JSON.stringify(playersStd));
 
-var teams = initTeams(leagueSize, posSizes);
+// var teams = initTeams(leagueSize, posSizes);
 
-var tempTeam = teams[0];
+// var tempTeam = teams[0];
+// teams[0].qbs[0].playerName = "Aaron Rodgers";
+// teams[0].wrs[0].playerName = "Davante Adams";
+// teams[0].rbs[0].playerName = "Aaron Jones";
 
-// var playerIndex = getPlayerRest(tempTeam, data);
-// var player = data[playerIndex];
+// // var playerIndex = getPlayerRest(tempTeam, data);
+// // var player = data[playerIndex];
 
-updateNeeds(tempTeam, 'r', 2, playersSize);
+// // updateNeeds(tempTeam, 'r', 2, playersSize);
+
+// getRatings(teams, unalteredData);
 
 //*************************************** */
 
-function ComputerDraft() {
-    return (
-        <div className="container">
+// function ComputerDraft() {
+//     return (
+//         <div className="container" style={{textAlign: 'center', marginTop: 20}}>
+//             <input name="test" type="text" style={{padding: 5}}></input>
+//         </div>
+//     )
+// };
 
-        </div>
-    )
-};
-
-export default ComputerDraft;
+// export default ComputerDraft;

@@ -24,23 +24,23 @@ function buildArray(leagueSize, playersSize) {
 function PlayerQueue({ queuePosition, queueArr }) {
 
     const childScroll   = { width: `40px`, height: `40px`};
-    const parentScroll  = { width: `100%`, height: `52px`};
+    const parentScroll  = { width: `100%`, height: `50px`, overflow: 'hidden', paddingBottom: 2};
 
     // const queueArr = buildArray(leagueSize, playersSize);
     // queueArr.unshift('Round 1');
 
-    const renderQueue = queueArr.map((i) => 
-        <li key={i.round + ":" + i.queueVal} className="list-element queue">
+    const renderQueue = queueArr.map((element, index) => 
+        <li key={element.round + ":" + element.queueVal} className="list-element queue">
             <div 
                 style={childScroll}
                 className={cx("queue-element-container", {
-                    'partition' : i.queueVal === -1,
-                    'round' : i.queueVal.toString().includes('Round'),
-                    'first-round' : i.queueVal.toString() === 'Round 1'
+                    'partition' : element.queueVal === -1,
+                    'round' : element.queueVal.toString().includes('Round'),
+                    'first-round' : index === 0
                 })}
-                id={i.queueVal===queuePosition ? 'active' : ''}
+                id={element.queueVal===queuePosition ? 'active' : ''}
             >
-                {i.queueVal}
+                {element.queueVal}
             </div>
         </li>
     );
@@ -48,9 +48,9 @@ function PlayerQueue({ queuePosition, queueArr }) {
     return (
         <ul>
             <div style={parentScroll}>
-                <HorizontalScroll className="queue-scroll">
+                <div className="queue-scroll">
                     {renderQueue}
-                </HorizontalScroll>
+                </div>
             </div>
       </ul>
     )
