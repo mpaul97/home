@@ -2,15 +2,11 @@ import "./Mock.css";
 import PlayerQueue from "../components/PlayerQueue";
 import Team from "../components/Team";
 import Player from "../components/Players";
-import tempPlayers from '../assets/placeholder.json';
-import playersStd from '../assets/tempData_std.json';
-import playersPpr from '../assets/tempData_ppr.json';
-import playersHalf from '../assets/tempData_half.json';
-import playersKings from '../assets/tempData_kings.json';
+import playersStd from '../assets/jsonData_std.json';
+import playersPpr from '../assets/jsonData_ppr.json';
+import playersHalf from '../assets/jsonData_half.json';
 import ding from '../assets/news-ting-6832.mp3';
 import { useDebugValue, useEffect, useState, useRef } from "react";
-import { db } from "../firebase-config";
-import { collection, getDocs } from "firebase/firestore";
 import Favorites from "../components/Favorites";
 import { Link, useLocation } from "react-router-dom";
 
@@ -116,9 +112,9 @@ function initNeeds() {
     needs.push(new Need('q', randomFloatInRange(0.1, 0.3)));
     needs.push(new Need('r', randomFloatInRange(0.3, 0.6)));
     needs.push(new Need('w', randomFloatInRange(0.2, 0.5)));
-    needs.push(new Need('t', randomFloatInRange(0.02, 0.1)));
-    needs.push(new Need('k', randomFloatInRange(0, 0.05)));
-    needs.push(new Need('d', randomFloatInRange(0, 0.07)));
+    needs.push(new Need('t', randomFloatInRange(0.1, 0.25)));
+    needs.push(new Need('k', randomFloatInRange(0, 0.12)));
+    needs.push(new Need('d', randomFloatInRange(0.02, 0.15)));
     return needs;
 };
 
@@ -640,7 +636,7 @@ function Mock() {
         computerTime = 10;
     }
 
-    var userTime = 10;
+    var userTime = 30;
 
     if (queuePosition === 1) {
         allTimerInterval = userTime;
@@ -1089,7 +1085,7 @@ function Mock() {
                         <button 
                             className="start-button" 
                             onClick={() => handleStart()}
-                            id={(startClicked && !draftEnd) ? 'hide-start' : ''}
+                            id={(startClicked || draftEnd) ? 'hide-start' : ''}
                         >
                             Start
                         </button>
