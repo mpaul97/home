@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar, AiOutlineMinusCircle, AiFillMinusCircle } from "react-icons/ai";
 
-function Favorites({ favPlayers, handleRemoveFav }) {
+function Favorites({ favPlayers, handleRemoveFav, teamHeight }) {
 
     // const [initSize, setInitSize] = useState(100);
 
@@ -39,8 +39,8 @@ function Favorites({ favPlayers, handleRemoveFav }) {
     );
 
     return (
-        <div className="favorites-container-list">
-            <ul className="favorites-list">
+        <div className="favorites-container-list" style={{height: teamHeight - 46}}>
+            <ul className="favorites-list" style={{maxHeight: (teamHeight - 46)}}>
                 {favPlayers.length===0 ? renderInit : renderFavorites}
             </ul>
         </div>

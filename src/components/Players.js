@@ -6,7 +6,7 @@ import playersHalf from '../assets/tempData_half.json';
 import playersKings from '../assets/tempData_kings.json';
 import { FaSearch } from 'react-icons/fa';
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -76,7 +76,7 @@ function getCurrentPlayers(activePosition, temp) {
 
 const positionOptions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'FLEX', 'K', 'DST'];
 
-function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, handleUserDraft, startClicked }) {
+function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, handleUserDraft, startClicked, handleChangeSearch, handleSearchDelete, teamHeight }) {
 
     //Players
     // const [players, setPlayers] = useState([]);
@@ -122,14 +122,14 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, hand
     const renderPlayers = activePlayers.map((i) => 
         <tr 
             onClick={() => handleClick(i)} 
-            className="table-rows" 
+            className={"table-rows " + i.position}
             key={i.name}
             id={selectedPlayerName===i.name ? 'activePlayer' : ''}
         >
             <td>{activePosition==='ALL' ? i.overallRanking : (activePosition==='FLEX' ? i.flexRanking : i.positionRanking) }</td>
             <td>{i.name}</td>
             <td>{i.team}</td>
-            <td>{i.position}</td>
+            <td className="position">{i.position}</td>
             <td>{i.projections}</td>
             <td>{i.lastSeasonPoints}</td>
         </tr>
@@ -143,11 +143,19 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, hand
             return true;
         }
         return false;
-    }
+    };
+
+    const topRef = useRef(null);
+
+    const [topHeight, setTopHeight] = useState(0);
+
+    useEffect(() => {
+        setTopHeight(topRef.current.clientHeight);
+    });
 
     return (
         <div className="players-all">
-            <div className="players-top">
+            <div className="players-top" ref={topRef}>
                 <div className="player-image-info">
                     <img className="player-image" src={playerImg} alt="Player Image"/>
                     <div className="player-text">
@@ -176,17 +184,28 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, hand
                     </div>
                 </div>
                 <div className="search-container">
-                    <form className="player-search-form">
-                        <input type="text" className="player-search" placeholder="Search players"/>
-                        <button type="submit" className="player-search-button"><FaSearch /></button>
-                    </form>
+                    <div className="player-search-form">
+                        <input 
+                            type="text" 
+                            className="player-search" 
+                            placeholder="Search players"
+                            onChange={handleChangeSearch}
+                            onKeyDown={handleSearchDelete}
+                        />
+                        <button 
+                            type="submit" 
+                            className="player-search-button"
+                        >
+                            <FaSearch />
+                        </button>
+                    </div>
                 </div>
-                <div className="toggle-drafted-container">
+                {/* <div className="toggle-drafted-container">
                     <form className="toggle-drafted-form">
                         <label htmlFor="toggle-drafted">Show Drafted Players</label>
                         <input name="toggle-drafted" type="checkbox"></input>
                     </form>
-                </div>
+                </div> */}
             </div>
             <div className="players-bottom">
                 <div className="player-positions-container">
@@ -194,7 +213,7 @@ function Players({ fav, favPlayers, queuePosition, currDrafter, allPlayers, hand
                         {renderPositionOptions}
                     </ul>
                 </div>
-                <div className="all-players-container">
+                <div className="all-players-container" style={{maxHeight: (teamHeight - topHeight - 42)}}>
                     <table className="players-table">
                         <thead>
                             <tr className="table-head">

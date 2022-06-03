@@ -9,9 +9,7 @@ const rootElement = document.getElementById("root");
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </React.StrictMode>,
   rootElement
 );

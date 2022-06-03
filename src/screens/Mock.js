@@ -7,11 +7,12 @@ import playersStd from '../assets/tempData_std.json';
 import playersPpr from '../assets/tempData_ppr.json';
 import playersHalf from '../assets/tempData_half.json';
 import playersKings from '../assets/tempData_kings.json';
-import { useDebugValue, useEffect, useState } from "react";
+import ding from '../assets/news-ting-6832.mp3';
+import { useDebugValue, useEffect, useState, useRef } from "react";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import Favorites from "../components/Favorites";
-import { useForceUpdate, useTime } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 
 //*************************************************** */
 //****************** Draft Logic ******************** */
@@ -112,12 +113,12 @@ function getMaxNeed(needs) {
 
 function initNeeds() {
     var needs = [];
-    needs.push(new Need('q', randomFloatInRange(0, 0.2)));
+    needs.push(new Need('q', randomFloatInRange(0.1, 0.3)));
     needs.push(new Need('r', randomFloatInRange(0.3, 0.6)));
     needs.push(new Need('w', randomFloatInRange(0.2, 0.5)));
-    needs.push(new Need('t', randomFloatInRange(0, 0.1)));
-    needs.push(new Need('k', 0));
-    needs.push(new Need('d', 0));
+    needs.push(new Need('t', randomFloatInRange(0.02, 0.1)));
+    needs.push(new Need('k', randomFloatInRange(0, 0.05)));
+    needs.push(new Need('d', randomFloatInRange(0, 0.07)));
     return needs;
 };
 
@@ -172,7 +173,7 @@ function getPlayerRound1(data) {
     var randomArr = choice(top10, 10, [0.3, 0.2, 0.115, 0.1, 0.085, 0.065, 0.055, 0.045, 0.025, 0.01]);
     var playerIndex = randomArr[0];
     var player = data[playerIndex];
-    return  player;
+    return player;
 };
 
 function getPlayerRest(team, data) {
@@ -203,7 +204,7 @@ function getPlayerRest(team, data) {
         temp = temp.sort(x => x.positionRanking);
         playerIndex = data.findIndex(x => x.name === temp[0].name);
     };
-    return playerIndex;
+    return data[playerIndex];
 };
 
 // NEEDS **********************************/
@@ -490,42 +491,6 @@ function displayTeam(teamObjs, selectedOption) {
     return arr;
 }
 
-// // Init team objects
-// function initTeams(qbSize, rbSize, wrSize, teSize, flexSize, kSize, dstSize, benchSize, leagueSize) {
-//     let teams = [];
-//     for (var i = 0; i < leagueSize; i++) {
-//         let team = new TeamObj();
-//         //team num
-//         team.teamNum = i + 1;
-//         //qbs
-//         let qbs = Array.from({length: qbSize}, (_, i) => i + 1).map((i) => new TeamPlayer('QB', ''));
-//         team.qbs = qbs;
-//         //rbs
-//         let rbs = Array.from({length: rbSize}, (_, i) => i + 1).map((i) => new TeamPlayer('RB', ''));
-//         team.rbs = rbs;
-//         //wrs
-//         let wrs = Array.from({length: wrSize}, (_, i) => i + 1).map((i) => new TeamPlayer('WR', ''));
-//         team.wrs = wrs;
-//         //tes
-//         let tes = Array.from({length: teSize}, (_, i) => i + 1).map((i) => new TeamPlayer('TE', ''));
-//         team.tes = tes;
-//         //flexes
-//         let flexes = Array.from({length: flexSize}, (_, i) => i + 1).map((i) => new TeamPlayer('FLEX', ''));
-//         team.flexes = flexes;
-//         //ks
-//         let ks = Array.from({length: kSize}, (_, i) => i + 1).map((i) => new TeamPlayer('K', ''));
-//         team.ks = ks;
-//         //dsts
-//         let dsts = Array.from({length: dstSize}, (_, i) => i + 1).map((i) => new TeamPlayer('DST', ''));
-//         team.dsts = dsts;
-//         //bench
-//         let bench = Array.from({length: benchSize}, (_, i) => i + 1).map((i) => new TeamPlayer('BEN', ''));
-//         team.bench = bench;
-//         teams.push(team);
-//     }
-//     return teams;
-// };
-
 // int time to String
 function convertTime(time) {
     var secNum = parseInt(time.toString(), 10);
@@ -565,11 +530,26 @@ function buildQueueArray(leagueSize, playersSize) {
 }
 
 function Mock() {
-    //Queue info
-    const leagueSize = 4;
-    const playersSize = 4;
-    const queuePosition = 2;
-    const leagueType = 'STD';
+
+    const location = useLocation();
+    const homeInfo = location.state;
+    
+    const leagueSize = homeInfo.leagueSize;
+    const queuePosition = homeInfo.queuePosition;
+    const leagueType = homeInfo.leagueType;
+    const posSizes = homeInfo.playersSize;
+    const clock = homeInfo.clock;
+
+    const playersSize = sum(posSizes);
+
+    // //              q  r  w  t  f  k  d  b
+    // var posSizes = [1, 2, 2, 1, 1, 1, 1, 7];
+
+    // //Queue info
+    // const leagueSize = 4;
+    // const playersSize = sum(posSizes);
+    // const queuePosition = 2;
+    // const leagueType = 'STD';
 
     const [queueArr, setQueueArr] = useState(buildQueueArray(leagueSize, playersSize));
 
@@ -585,45 +565,21 @@ function Mock() {
         // setQueueArr(queueArr.filter(x => x.queueVal !== currDrafter && x.round !== round));
     };
 
-    // Build teams
-    // const qbSize = 1;
-    // const rbSize = 2;
-    // const wrSize = 2;
-    // const teSize = 1;
-    // const flexSize = 1;
-    // const kSize = 1;
-    // const dstSize = 1;
-    // const benchSize = 7;
-
-    //             q   r  w  t  f  k  d  b
-    var posSizes = [1, 2, 2, 1, 1, 1, 1, 7];
-
     const [teamObjs, setTeamObjs] = useState(initTeams(leagueSize, posSizes));
-
-    // Players from JSON
-    // var jsonPlayers = JSON.parse(JSON.stringify(tempPlayers));
-
-    // const [allPlayers, setAllPlayers] = useState([]);
-
-    // setAllPlayers(jsonPlayers);
-
-    // if (leagueType == 'STD') {
-    //     jsonPlayers = JSON.parse(JSON.stringify(playersStd));
-    //     setAllPlayers(jsonPlayers);
-    // }
 
     // Init Players by league type
     const [allPlayers, setAllPlayers] = useState(() => {
-        if (leagueType === 'STD') {
+        if (leagueType === 'Standard') {
             return JSON.parse(JSON.stringify(playersStd));
+        } else if (leagueType === 'PPR') {
+            return JSON.parse(JSON.stringify(playersPpr));
+        } else if (leagueType === 'Half-PPR') {
+            return JSON.parse(JSON.stringify(playersHalf));
         }
     });
 
-    const [unalteredPlayers, setUnalteredPlayers] = useState(() => {
-        if (leagueType === 'STD') {
-            return JSON.parse(JSON.stringify(playersStd));
-        }
-    });
+    // Player copies
+    const [unalteredPlayers, setUnalteredPlayers] = useState([...allPlayers]);
 
     const [favPlayers, setFavPlayers] = useState([]);
 
@@ -636,12 +592,55 @@ function Mock() {
         setFavPlayers(favPlayers.filter(val => val !== name));
     };
 
+    // Search Logic
+    const [searchVal, setSearchVal] = useState();
+
+    const handleChangeSearch = (event) => {
+        var input = event.target.value;
+        setSearchVal(input);
+        if (input.length > 0) {
+            let temp = allPlayers.filter(x => {
+                var nameSplit = x.name.split(" ");
+                var sub1 = nameSplit[0].substring(0, input.length);
+                var sub2 = nameSplit[1].substring(0, input.length);
+                if ((sub1.toLowerCase() === input.toLowerCase()) || (sub2.toLowerCase() === input.toLowerCase())) {
+                    return x;
+                }
+            });
+            if (temp.length !== 0) {
+                setAllPlayers(temp);
+            };
+        } else {
+            setAllPlayers(unalteredPlayers);
+        }
+    };
+
+    const handleSearchDelete = (event) => {
+        if (event.key === 'Backspace') {
+            setAllPlayers(unalteredPlayers);
+        }
+    };
+
     // Start timer
     const [startClicked, setStartClicked] = useState(false);
 
+    // Drafted end
+    const [draftEnd, setDraftEnd] = useState(false);
+
     var allTimerInterval;
-    var computerTime = 2;
-    var userTime = 5;
+    var computerTime = 0;
+
+    if (clock === 'Instant') {
+        computerTime = 0;
+    } else if (clock === 'Fast') {
+        computerTime = 2;
+    } else if (clock === 'Medium') {
+        computerTime = 5;
+    } else if (clock === 'Slow') {
+        computerTime = 10;
+    }
+
+    var userTime = 10;
 
     if (queuePosition === 1) {
         allTimerInterval = userTime;
@@ -652,6 +651,10 @@ function Mock() {
 
     const handleStart = () => {
         setStartClicked(true);
+        setDisplayInfo("Draft started.");
+        if (queuePosition === 1) {
+            setDisplayInfo(displayInfo + "You're on the clock.");
+        }
     };
 
     useEffect(() => {
@@ -760,9 +763,8 @@ function Mock() {
                         break;
                     }
                 }
-            } else {
-                alert(position, " filled!");
             }
+            teamObj[0] = updateNeeds(teamObj[0], 'q', round, playersSize);
         // end QB
         } else if (position === 'RB') {
             if (emptyPositions[getEmptyIndex('r')] !== 0) {
@@ -786,9 +788,8 @@ function Mock() {
                         break;
                     }
                 }
-            } else {
-                alert(position, " filled!");
             }
+            teamObj[0] = updateNeeds(teamObj[0], 'r', round, playersSize);
         // end RB
         } else if (position === 'WR') {
             if (emptyPositions[getEmptyIndex('w')] !== 0) {
@@ -812,9 +813,8 @@ function Mock() {
                         break;
                     }
                 }
-            } else {
-                alert(position, " filled!");
             }
+            teamObj[0] = updateNeeds(teamObj[0], 'w', round, playersSize);
         // end WR
         } else if (position === 'TE') {
             if (emptyPositions[getEmptyIndex('t')] !== 0) {
@@ -838,9 +838,8 @@ function Mock() {
                         break;
                     }
                 }
-            } else {
-                alert(position, " filled!");
             }
+            teamObj[0] = updateNeeds(teamObj[0], 't', round, playersSize);
         // end TE
         } else if (position === 'K') {
             if (emptyPositions[getEmptyIndex('k')] !== 0) {
@@ -857,9 +856,8 @@ function Mock() {
                         break;
                     }
                 }
-            } else {
-                alert(position, " filled!");
             }
+            teamObj[0] = updateNeeds(teamObj[0], 'k', round, playersSize);
         // end K
         } else if (position === 'DST') {
             if (emptyPositions[getEmptyIndex('d')] !== 0) {
@@ -876,9 +874,8 @@ function Mock() {
                         break;
                     }
                 }
-            } else {
-                alert(position, " filled!");
             }
+            teamObj[0] = updateNeeds(teamObj[0], 'd', round, playersSize);
         // end DST
         }
         let index = teamObjs.findIndex(x => x.teamNum === currDrafter);
@@ -886,51 +883,162 @@ function Mock() {
         newTeamObjs[index] = teamObj[0];
         setTeamObjs(newTeamObjs);
         setFlattenTeamObjs(displayTeam(newTeamObjs, selectedOption));
-    }
+    };
+
+    const [displayInfo, setDisplayInfo] = useState("Click \"Start\" to begin");
 
     const handleComputerDraft = () => {
         let player = allPlayers[0];
+        let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
         if (round === 1) {
             if (currDrafter <= 3) {
                 player = getPlayerRound1Top3(allPlayers);
+            } else {
+                player = getPlayerRound1(allPlayers);
+            }
+        } else {
+            player = getPlayerRest(teamObj[0], allPlayers);
+        }
+        updateTeamObj(player, teamObj, currDrafter);
+        var displayString = "Team " + currDrafter.toString() + " selects " + player.position + " " + player.name + ". ";
+        if (simpleQueueArr[queueIndex + 1] !== queuePosition) {
+            setDisplayInfo(displayString);
+        } else {
+            setDisplayInfo(displayString + "You're on the clock.");
+        }
+        if (simpleQueueArr[queueIndex] === queuePosition) {
+            var userDisplayString = "You selected " + player.position + " " + player.name + ". ";
+            setDisplayInfo(userDisplayString);
+        }
+        setAllPlayers(allPlayers.filter(x => x.name !== player.name));
+        setFavPlayers(favPlayers.filter(x => x !== player.name));
+    };
+
+    // check if space for user drafted player
+    const isPositionSpace = (player, team) => {
+        var isSpace = true;
+        var flexPoses = ['r', 'w', 't'];
+        var missingVals = [];
+        if (benchFull(team)) {
+            var missing = getMissingStarters(team);
+            var positionKey = player.position.charAt(0).toLowerCase();
+            for (var m of missing) {
+                var abbr = m[0];
+                var val = m[1];
+                if (abbr === positionKey) {
+                    missingVals.push(val);
+                };
+                if (flexPoses.includes(positionKey) && abbr === 'f') {
+                    missingVals.push(val);
+                }
+            };
+            var temp = missingVals.filter(x => x !== 0);
+            if (temp.length === 0) {
+                isSpace = false;
+            }
+        };
+        return isSpace;
+    };
+
+    const handleAutoUserDraft = () => {
+        let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
+        var favDrafted = false;
+        if (favPlayers.length > 0) {
+            for (var name of favPlayers) {
+                var player = allPlayers.filter(x => x.name == name)[0];
+                if (isPositionSpace(player, teamObj[0])) {
+                    handleUserDraft(player);
+                    favDrafted = true;
+                    break;
+                }
             }
         }
-        let topPlayer = allPlayers[0];
-        let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
-        updateTeamObj(topPlayer, teamObj, currDrafter);
-        setAllPlayers(allPlayers.filter(x => x.name !== topPlayer.name));
+        if (!favDrafted) {
+            handleComputerDraft();
+        }
     };
 
     const handleUserDraft = (selectedPlayer) => {
         let teamObj = teamObjs.filter(x => x.teamNum === currDrafter);
-        updateTeamObj(selectedPlayer, teamObj, currDrafter);
-        setAllPlayers(allPlayers.filter(x => x.name !== selectedPlayer.name));
-        setTimerNum(-1);
+        if (isPositionSpace(selectedPlayer, teamObj[0])) {
+            updateTeamObj(selectedPlayer, teamObj, currDrafter);
+            var displayString = "You selected " + selectedPlayer.position + " " + selectedPlayer.name + ". ";
+            setDisplayInfo(displayString);
+            setAllPlayers(allPlayers.filter(x => x.name !== selectedPlayer.name));
+            setFavPlayers(favPlayers.filter(x => x !== selectedPlayer.name));
+            setTimerNum(-1);
+        } else {
+            var tempInfo = displayInfo;
+            setDisplayInfo("Position already filled.");
+            setTimeout(() => {
+                setDisplayInfo(tempInfo);
+            }, 500);
+        }
     };
+
+    // Audio
+    const audio = new Audio(ding);
+    audio.loop = false;
+    audio.volume = 0.4;
 
     const [queueIndex, setQueueIndex] = useState(0);
     const simpleQueueArr = buildSimpleQueue(leagueSize, playersSize);
     const [currDrafter, setCurrDrafter] = useState(simpleQueueArr[queueIndex]);
 
-    useEffect(() => {
-        if (startClicked) {
-            if (timerNum === -1) {
+    useEffect(() => { // main draft loop logic
+        if (startClicked && !draftEnd) {
+            if (timerNum === -1) { // end users time
                 if (currDrafter !== queuePosition) {
                     handleComputerDraft();
                     setCurrDrafter(simpleQueueArr[queueIndex + 1]);
                     setQueueIndex(queueIndex + 1);
-                    shiftQueue(currDrafter, round);
-                    if (simpleQueueArr[queueIndex] === simpleQueueArr[queueIndex + 1]) {
-                        setRound(round + 1);
-                    }
-                    if ((simpleQueueArr[queueIndex + 1]) !== queuePosition) {
-                        setTimerNum(computerTime);
+                    if ((queueIndex + 1) !== simpleQueueArr.length) {
+                        shiftQueue(currDrafter, round);
+                        if (simpleQueueArr[queueIndex] === simpleQueueArr[queueIndex + 1]) {
+                            setRound(round + 1);
+                        }
+                        if ((simpleQueueArr[queueIndex + 1]) !== queuePosition) {
+                            setTimerNum(computerTime);
+                        } else {
+                            audio.play();
+                            setTimerNum(userTime);
+                        }
                     } else {
-                        setTimerNum(userTime);
+                        setDraftEnd(true);
+                        queueArr.shift()
+                        queueArr.shift()
                     }
                 } else {
                     setCurrDrafter(simpleQueueArr[queueIndex + 1]);
                     setQueueIndex(queueIndex + 1);
+                    if ((queueIndex + 1) !== simpleQueueArr.length) {
+                        shiftQueue(currDrafter, round);
+                        if (simpleQueueArr[queueIndex] === simpleQueueArr[queueIndex + 1]) {
+                            setRound(round + 1);
+                        }
+                        if ((simpleQueueArr[queueIndex + 1]) !== queuePosition) {
+                            setTimerNum(computerTime);
+                        } else {
+                            audio.play();
+                            setTimerNum(userTime);
+                        }
+                    } else {
+                        setDraftEnd(true);
+                        queueArr.shift()
+                        queueArr.shift()
+                    }
+                }
+            }
+        }; // end main draft logic loop
+    });
+
+    useEffect(() => { // handling user on clock -> did not draft in time
+        if (currDrafter === queuePosition) {
+            if (timerNum === 0) {
+                handleAutoUserDraft();
+                setCurrDrafter(simpleQueueArr[queueIndex + 1]);
+                setQueueIndex(queueIndex + 1);
+                if ((queueIndex + 1) !== simpleQueueArr.length) {
                     shiftQueue(currDrafter, round);
                     if (simpleQueueArr[queueIndex] === simpleQueueArr[queueIndex + 1]) {
                         setRound(round + 1);
@@ -938,12 +1046,37 @@ function Mock() {
                     if ((simpleQueueArr[queueIndex + 1]) !== queuePosition) {
                         setTimerNum(computerTime);
                     } else {
+                        audio.play();
                         setTimerNum(userTime);
                     }
+                } else {
+                    setDraftEnd(true);
+                    queueArr.shift()
+                    queueArr.shift()
                 }
             }
         }
     });
+
+    useEffect(() => { // end draft -> info and grades
+        if (draftEnd) {
+            var ratings = getRatings(teamObjs, unalteredPlayers);
+            var teamRating = ratings.filter(x => x[0] === queuePosition)[0];
+            setDisplayInfo("Draft finished. Your team grade: " + teamRating[1]);
+            setStartClicked(false);
+        }
+    }, [draftEnd]);
+
+    const teamRef = useRef(null);
+    const playersRef = useRef(null);
+
+    const [teamHeight, setTeamHeight] = useState(0);
+    const [playersHeight, setPlayersHeight] = useState(0);
+
+    useEffect(() => { // set div heights
+        setTeamHeight(teamRef.current.clientHeight);
+        setPlayersHeight(playersRef.current.clientHeight);
+    }, []);
 
     //***************************************************
 
@@ -956,10 +1089,19 @@ function Mock() {
                         <button 
                             className="start-button" 
                             onClick={() => handleStart()}
-                            id={startClicked ? 'hide-start' : ''}
+                            id={(startClicked && !draftEnd) ? 'hide-start' : ''}
                         >
                             Start
                         </button>
+                    </div>
+                    <div className="return-container">
+                        <Link to="/">
+                            <button 
+                                className="return-button"
+                            >
+                                Return To Home
+                            </button>
+                        </Link>
                     </div>
                     <div className="timer-container">
                         <h3 className="timer">
@@ -967,6 +1109,9 @@ function Mock() {
                         </h3>
                     </div>
                 </div>
+            </div>
+            <div className="draft-info-container">
+                <h3 className="draft-info">{displayInfo}</h3>
             </div>
             <div className="player-queue">
                 <PlayerQueue
@@ -976,7 +1121,7 @@ function Mock() {
             </div>
             <div className="content-container">
                 <div className="team-container">
-                    <div className="team-players-container">
+                    <div className="team-players-container" ref={teamRef}>
                         <Team 
                             teamInfo={teamInfo}
                             leagueSize={leagueSize}
@@ -988,7 +1133,7 @@ function Mock() {
                         />
                     </div>
                 </div>
-                <div className="player-container">
+                <div className="player-container" ref={playersRef}>
                     <Player 
                         fav={handleFavorite}
                         favPlayers={favPlayers}
@@ -997,6 +1142,9 @@ function Mock() {
                         allPlayers={allPlayers}
                         handleUserDraft={handleUserDraft}
                         startClicked={startClicked}
+                        handleChangeSearch={handleChangeSearch}
+                        handleSearchDelete={handleSearchDelete}
+                        teamHeight={teamHeight}
                     />
                 </div>
                 <div className="favorites-container">
@@ -1004,6 +1152,7 @@ function Mock() {
                     <Favorites 
                         favPlayers={favPlayers}
                         handleRemoveFav={handleRemoveFav}
+                        teamHeight={teamHeight}
                     />
                 </div>
             </div>

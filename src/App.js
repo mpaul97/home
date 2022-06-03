@@ -1,12 +1,17 @@
 import Home from "./screens/Home";
 import Mock from "./screens/Mock";
-import ComputerDraft from "./components/ComputerDraft";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <div className='container'>
-      {/* <Home /> */}
-      <Mock />
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/mock" element={<Mock />} />
+        </Routes>
+      </BrowserRouter>
+      {/* <Mock /> */}
     </div>
   )
 }
