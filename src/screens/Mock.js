@@ -530,31 +530,30 @@ function Mock() {
     const location = useLocation();
     const homeInfo = location.state;
 
-    // var leagueSize = homeInfo.leagueSize;
-    // var leagueSize = 8;
-    // var queuePosition = homeInfo.queuePosition;
-    // var leagueType = homeInfo.leagueType;
-    // var posSizes = homeInfo.playersSize;
-    // var clock = homeInfo.clock;
+    var leagueSize = homeInfo.leagueSize;
+    var queuePosition = homeInfo.queuePosition;
+    var leagueType = homeInfo.leagueType;
+    var posSizes = homeInfo.playersSize;
+    var clock = homeInfo.clock;
 
-    // var playersSize = sum(posSizes);
+    var playersSize = sum(posSizes);
 
-    const [leagueSize, setLeagueSize] = useState(8);
-    const [queuePosition, setQueuePosition] = useState(1);
-    const [leagueType, setLeagueType] = useState('Standard');
-    const [posSizes, setPosSizes] = useState([]);
-    const [clock, setClock] = useState('Instant');
+    // const [leagueSize, setLeagueSize] = useState(8);
+    // const [queuePosition, setQueuePosition] = useState(1);
+    // const [leagueType, setLeagueType] = useState('Standard');
+    // const [posSizes, setPosSizes] = useState([]);
+    // const [clock, setClock] = useState('Instant');
 
-    const [playersSize, setPlayersSize] = useState(0);
+    // const [playersSize, setPlayersSize] = useState(0);
 
-    useEffect(() => {
-        setLeagueSize(homeInfo.leagueSize);
-        setQueuePosition(homeInfo.queuePosition);
-        setLeagueType(homeInfo.leagueType);
-        setPosSizes(homeInfo.playersSize);
-        setClock(homeInfo.clock);
-        setPlayersSize(sum(posSizes));
-    }, [])
+    // useEffect(() => {
+    //     setLeagueSize(homeInfo.leagueSize);
+    //     setQueuePosition(homeInfo.queuePosition);
+    //     setLeagueType(homeInfo.leagueType);
+    //     setPosSizes(homeInfo.playersSize);
+    //     setClock(homeInfo.clock);
+    //     setPlayersSize(sum(posSizes));
+    // }, [])
 
     // //              q  r  w  t  f  k  d  b
     // var posSizes = [1, 2, 2, 1, 1, 1, 1, 7];
