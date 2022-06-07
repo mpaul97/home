@@ -1109,7 +1109,7 @@ function Mock() {
                         </button>
                     </div>
                     <div className="return-container">
-                        <Link to="/">
+                        <Link to="/home">
                             <button 
                                 className="return-button"
                             >

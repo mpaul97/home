@@ -8,7 +8,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/home" element={<Home />} />
-          <Route path="/mock" element={<Mock />} />
+          <Route path="/content" element={<Mock />} />
         </Routes>
       </BrowserRouter>
       {/* <Mock /> */}
