@@ -7,8 +7,8 @@ function App() {
     <div className='container'>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/mock/home" element={<Home />} />
-          <Route path="/mock/content" element={<Mock />} />
+          <Route exact path="/" element={<Home />} />
+          <Route path="/mock" element={<Mock />} />
         </Routes>
       </BrowserRouter>
       {/* <Mock /> */}
