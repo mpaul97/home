@@ -1,6 +1,6 @@
 import Home from "./screens/Home";
 import Mock from "./screens/Mock";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 
 function App() {
   return (
