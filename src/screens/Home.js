@@ -206,7 +206,7 @@ function Home() {
                 <div className='divider'></div>
                 <div className='section-container submit'>
                     <Link 
-                        to="/content"
+                        to="/mock/content"
                         state={{
                             leagueSize: size,
                             queuePosition: queue,
