@@ -159,8 +159,10 @@ function Home() {
                 }}>
                 Minute Mock is an NFL fantasy football mock draft simulator which can be
                 very quickly without having to rely on other users and is fully customizable.
-                To begin just select select your specifications below (Computer Clock selection 
-                determines how fast the comptuer will make its selections) and then click submit. 
+                To begin just select select your specifications below  and then click submit. Computer Clock selection 
+                determines how fast the comptuer will make its selections. 
+                <br></br><b>Instant:</b> 0s, <b>Fast:</b> 2s, <b>Medium:</b> 5s, <b>Slow:</b> 10s<br></br>
+                <b>User Time Always:</b> 30s<br></br>
                 Once in the draft page, you can then add players to your favorites which will be 
                 autoselected if your time expires and your team has room for that position. Finally, 
                 click start in the upper right to begin the draft.
